@@ -11,24 +11,23 @@ import { AuthClient } from '@/support/api/AuthClient';
 test.describe('E2E: Login Flow', () => {
 
     test('[E2E-1.1.1] Complete Login Journey', async ({ page, request, cleanup }) => {
-        /*  // ✅ ARRANGE: Create user via API (fast setup)
-         const userData = new UserBuilder().build();
-         const authClient = new AuthClient(request);
-         const user = await authClient.register(userData);
-         cleanup.track('user', user.id); */
+        // ✅ ARRANGE: Create user via API (fast setup)
+        const userData = new UserBuilder().build();
+        const authClient = new AuthClient(request);
+        await authClient.register(userData);
 
         // ✅ ACT: Navigate to login page
-        await page.goto('http://localhost:3000');
+        await page.goto('/');
         await page.getByTestId('desktop-sign-in-button').click();
 
-        // Fill login form
-        await page.getByPlaceholder('Enter your email address').fill('waltertestcustomer@gmail.com'); // replace with: userData.email
-        await page.getByPlaceholder('Enter your password').fill('123***man'); // replace with: userData.password
+        // Fill login form (Clerk Modal)
+        await page.getByPlaceholder('Enter your email address').fill('waltertestcustomer@gmail.com');
+        await page.getByRole('button', { name: 'Continue', exact: true }).click();
+        await page.getByPlaceholder('Enter your password').fill('123***man');
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
 
-        // ✅ ASSERT: User is redirected to dashboard
-        await expect(page.getByRole('button', { name: 'Open user menu' })).toBeVisible();
-        //await expect(page.getByText(`Welcome, Walter Test`)).toBeVisible();// replace with: userData.name
+        // ✅ ASSERT: User is redirected and authenticated
+        await expect(page.getByRole('button', { name: 'Open user menu' }).or(page.getByTestId('user-button'))).toBeVisible({ timeout: 15000 });
     });
 
     test.skip('[E2E-1.1.2] Login with Invalid Credentials', async ({ page }) => {

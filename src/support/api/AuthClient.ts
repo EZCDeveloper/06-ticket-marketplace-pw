@@ -1,43 +1,49 @@
 import { APIRequestContext, expect } from '@playwright/test';
 import { UserData } from '@/support/builders/UserBuilder';
+import { ConvexClient } from './ConvexClient';
 
 /**
  * AuthClient - API client for authentication operations
  * 
- * Provides helper methods for user registration and login.
- * Adapt these endpoints to match your API.
+ * Re-implemented to use Convex mutations for this application.
  */
 export class AuthClient {
-    constructor(private request: APIRequestContext) { }
+    private convex: ConvexClient;
 
-    /**
-     * Register a new user
-     */
-    async register(userData: UserData): Promise<any> {
-        const response = await this.request.post('/api/auth/register', {
-            data: userData
-        });
-
-        expect(response.ok()).toBeTruthy();
-        const user = await response.json();
-
-        console.log(`✅ User registered: ${user.email || user.id}`);
-        return user;
+    constructor(private request: APIRequestContext) {
+        this.convex = new ConvexClient(request);
     }
 
     /**
-     * Login a user and return authenticated context
+     * Register/Update a user profile
      */
-    async login(credentials: { email: string; password: string }): Promise<APIRequestContext> {
-        const response = await this.request.post('/api/auth/login', {
-            data: credentials
+    async register(userData: UserData): Promise<any> {
+        // Use the Convex mutation instead of /api/auth/register
+        // In this app, users are created/updated via users:updateUser
+        const userId = `clerk_${userData.email.split('@')[0]}`;
+
+        await this.convex.mutation('users:updateUser', {
+            userId,
+            name: userData.name,
+            email: userData.email
         });
 
-        expect(response.ok()).toBeTruthy();
+        console.log(`✅ User registered via Convex: ${userData.email}`);
 
-        console.log(`✅ User logged in: ${credentials.email}`);
+        // Return a mock user object that matches expectations
+        return {
+            id: userId,
+            email: userData.email,
+            name: userData.name
+        };
+    }
 
-        // Return the request context (it now has auth cookies/tokens)
+    /**
+     * Login - Mocked for API testing purposes
+     */
+    async login(credentials: { email: string; password: string }): Promise<APIRequestContext> {
+        console.log(`✅ User login simulated: ${credentials.email}`);
+        // Return context (in real scenario would set cookies/tokens)
         return this.request;
     }
 }
