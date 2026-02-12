@@ -23,7 +23,7 @@ test.describe('Utility: Database Cleanup', () => {
         return parts[parts.length - 1];
     };
 
-    test('Remove event and all related data by Event ID', async () => {
+    test.skip('Remove event and all related data by Event ID', async () => {
         // 🛠️ CONFIGURATION: Set the event URL here
         const event = 'jh72pgpsh617fr23m8frhaykes80er8c';
         const eventUrl = `http://localhost:3000/event/${event}`;

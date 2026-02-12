@@ -28,7 +28,7 @@ test.describe('E2E: Seller Flow', () => {
         await expect(page).toHaveURL(/\/seller/);
 
         // Click create event button
-        await page.getByTestId('create-event-nav-button').or(page.getByRole('button', { name: /Create Event/i })).click();
+        await page.getByTestId('create-event-button').or(page.getByRole('button', { name: /Create Event/i })).click();
 
         // Fill form using data-testids
         const eventData = new EventBuilder().build();
@@ -45,6 +45,6 @@ test.describe('E2E: Seller Flow', () => {
         await page.getByTestId('event-form-submit-button').click();
 
         // ✅ ASSERT: Event is created and visible in dashboard
-        await expect(page.getByText(eventData.name)).toBeVisible({ timeout: 15000 });
+        await expect(page.getByTestId('event-title').filter({ hasText: eventData.name })).toBeVisible({ timeout: 15000 });
     });
 });
