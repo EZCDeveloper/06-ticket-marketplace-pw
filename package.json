@@ -11,7 +11,9 @@
         "test:smoke": "playwright test tests/smoke",
         "test:debug": "playwright test --debug",
         "report": "playwright show-report",
-        "ui": "playwright test --ui"
+        "ui": "playwright test --ui",
+        "cleanup": "playwright test tests/api/db-cleanup.spec.ts --project=chromium --reporter=line",
+        "cleanup:ui": "playwright test tests/api/db-cleanup.spec.ts --ui"
     },
     "keywords": [
         "playwright",

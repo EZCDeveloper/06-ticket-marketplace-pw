@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { EventBuilder } from '@/support/builders/EventBuilder';
-import { UserBuilder } from '@/support/builders/UserBuilder';
+// import { UserBuilder } from '@/support/builders/UserBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
 
 /**
