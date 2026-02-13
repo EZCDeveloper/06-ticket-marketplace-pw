@@ -64,7 +64,10 @@ test.describe('E2E: Purchase Flow', () => {
         await expect(page.getByTestId('event-detail-title')).toBeVisible();
 
         // Use sold-out-badge which is visible to anonymous users in the EventCard
-        await expect(page.getByTestId('sold-out-badge').first()).toBeVisible();
+        const soldOut = page.getByTestId('sold-out-badge').first()
+        await expect(soldOut).toHaveText('Sold Out')
+
         await expect(page.getByTestId('event-availability').first()).toContainText('0 / 0 available');
+
     });
 });

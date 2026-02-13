@@ -19,9 +19,12 @@ export class EventBuilder extends BaseBuilder<EventData> {
         // Future date (next 30 days)
         const futureDate = faker.date.soon({ days: 30 }).getTime();
 
+        const artist = faker.person.fullName();
+        const genre = faker.music.genre();
+
         return {
-            name: `${faker.commerce.productName()} Concert`,
-            description: faker.commerce.productDescription(),
+            name: `${artist} - World ${genre} Tour`,
+            description: `Experience the best of ${genre} live with ${artist}! Don't miss this international event.`,
             location: `${faker.location.city()}, ${faker.location.country()}`,
             eventDate: futureDate,
             price: faker.number.int({ min: 10, max: 200 }),
