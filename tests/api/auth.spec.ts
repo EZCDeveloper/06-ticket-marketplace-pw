@@ -11,20 +11,20 @@ import { AuthClient } from '@/support/api/AuthClient';
 test.describe('API: Authentication', () => {
 
     test('[API-1.1.1] User Registration - Success', async ({ request, cleanup }) => {
-        // ✅ ARRANGE: Build test data using builder
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
+        let user: any;
 
-        // ✅ ACT: Register user via API
-        const user = await authClient.register(userData);
+        await test.step('Step 1: Register user via API', async () => {
+            user = await authClient.register(userData);
+            expect(user).toHaveProperty('id');
+            cleanup.track('user', user.id);
+        });
 
-        // ✅ ASSERT: Validate response
-        expect(user).toHaveProperty('id');
-        expect(user.email).toBe(userData.email);
-        expect(user.name).toBe(userData.name);
-
-        // ✅ CLEANUP: Track for auto-cleanup
-        cleanup.track('user', user.id);
+        await test.step('Step 2: Validate user data matches', async () => {
+            expect(user.email).toBe(userData.email);
+            expect(user.name).toBe(userData.name);
+        });
     });
 
     test('[API-1.1.2] User Registration - Logic Check', async ({ request }) => {
@@ -33,19 +33,20 @@ test.describe('API: Authentication', () => {
     });
 
     test('[API-1.2.1] User Login - Success', async ({ request, cleanup }) => {
-        // ✅ ARRANGE: Create and register user
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
-        const user = await authClient.register(userData);
-        cleanup.track('user', user.id);
 
-        // ✅ ACT: Login
-        const authContext = await authClient.login({
-            email: userData.email,
-            password: userData.password
+        await test.step('Step 1: Create and register user', async () => {
+            const user = await authClient.register(userData);
+            cleanup.track('user', user.id);
         });
 
-        // ✅ ASSERT: Context is authenticated
-        expect(authContext).toBeDefined();
+        await test.step('Step 2: Perform login and verify context', async () => {
+            const authContext = await authClient.login({
+                email: userData.email,
+                password: userData.password
+            });
+            expect(authContext).toBeDefined();
+        });
     });
 });

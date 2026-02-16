@@ -1,4 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+
+/**
+ * Read environment variables from file.
+ * https://github.com/motdotla/dotenv
+ */
+dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 /**
  * Playwright Configuration - SaaS Turbo Template
@@ -44,17 +52,28 @@ export default defineConfig({
     // Configure projects for different browsers
     projects: [
         {
+            name: 'setup',
+            testMatch: /auth\.setup\.ts/,
+        },
+        {
             name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
+            use: {
+                ...devices['Desktop Chrome'],
+                // Use prepared auth state.
+                storageState: 'playwright/.auth/user.json',
+            },
+            dependencies: ['setup'],
         },
         // Uncomment to enable Firefox and WebKit
         // {
         //   name: 'firefox',
-        //   use: { ...devices['Desktop Firefox'] },
+        //   use: { ...devices['Desktop Firefox'], storageState: 'playwright/.auth/user.json' },
+        //   dependencies: ['setup'],
         // },
         // {
         //   name: 'webkit',
-        //   use: { ...devices['Desktop Safari'] },
+        //   use: { ...devices['Desktop Safari'], storageState: 'playwright/.auth/user.json' },
+        //   dependencies: ['setup'],
         // },
     ],
 

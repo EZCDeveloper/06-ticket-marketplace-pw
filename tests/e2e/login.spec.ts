@@ -10,24 +10,27 @@ import { AuthClient } from '@/support/api/AuthClient';
  */
 test.describe('E2E: Login Flow', () => {
 
+    test.use({ storageState: { cookies: [], origins: [] } });
+
     test('[E2E-1.1.1] Complete Login Journey', async ({ page, request, cleanup }) => {
-        // ✅ ARRANGE: Create user via API (fast setup)
-        const userData = new UserBuilder().build();
-        const authClient = new AuthClient(request);
-        await authClient.register(userData);
+        const email = process.env.TEST_USER_EMAIL!;
+        const password = process.env.TEST_USER_PASSWORD!;
 
-        // ✅ ACT: Navigate to login page
-        await page.goto('/');
-        await page.getByTestId('desktop-sign-in-button').click();
+        await test.step('Step 1: Navigate to login page', async () => {
+            await page.goto('/');
+            await page.getByTestId('desktop-sign-in-button').click();
+        });
 
-        // Fill login form (Clerk Modal)
-        await page.getByPlaceholder('Enter your email address').fill('waltertestcustomer@gmail.com');
-        await page.getByRole('button', { name: 'Continue', exact: true }).click();
-        await page.getByPlaceholder('Enter your password').fill('123***man');
-        await page.getByRole('button', { name: 'Continue', exact: true }).click();
+        await test.step('Step 2: Fill login form', async () => {
+            await page.getByPlaceholder('Enter your email address').fill(email);
+            await page.getByRole('button', { name: 'Continue', exact: true }).click();
+            await page.getByPlaceholder('Enter your password').fill(password);
+            await page.getByRole('button', { name: 'Continue', exact: true }).click();
+        });
 
-        // ✅ ASSERT: User is redirected and authenticated
-        await expect(page.getByRole('button', { name: 'Open user menu' }).or(page.getByTestId('user-button'))).toBeVisible({ timeout: 15000 });
+        await test.step('Step 3: Verify authentication success', async () => {
+            await expect(page.getByRole('button', { name: 'Open user menu' }).or(page.getByTestId('user-button'))).toBeVisible({ timeout: 15000 });
+        });
     });
 
     test.skip('[E2E-1.1.2] Login with Invalid Credentials', async ({ page }) => {

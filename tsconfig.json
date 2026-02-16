@@ -14,23 +14,26 @@
         "baseUrl": ".",
         "paths": {
             "@/*": [
-                "src/*"
+                "./*"
             ],
             "@/fixtures/*": [
-                "src/fixtures/*"
+                "fixtures/*"
             ],
             "@/support/*": [
-                "src/support/*"
+                "support/*"
             ],
             "@/utils/*": [
-                "src/utils/*"
+                "utils/*"
             ]
         }
     },
     "include": [
-        "src/**/*",
+        "fixtures/**/*",
+        "support/**/*",
+        "utils/**/*",
         "tests/**/*",
-        "config/**/*"
+        "config/**/*",
+        "auth.setup.ts"
     ],
     "exclude": [
         "node_modules",
