@@ -6,6 +6,9 @@
     "scripts": {
         "test": "playwright test",
         "test:headed": "playwright test --headed",
+        "test:regression": "playwright test --project=My_Tests --max-failures=1",
+        "test:regression:no-setup": "playwright test --project=My_Tests --no-deps --max-failures=1",
+        "test:regression:demo": "playwright test --project=My_Tests --reporter=line --max-failures=1",
         "test:api": "playwright test tests/api",
         "test:e2e": "playwright test tests/e2e",
         "test:smoke": "playwright test tests/smoke",

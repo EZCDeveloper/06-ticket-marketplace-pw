@@ -24,18 +24,24 @@ export class Buyer {
         await this.wait.waitForLoadingFinished();
         const joinButton = (this.page.getByTestId('buy-ticket-button').or(this.page.getByTestId('join-queue-button'))).first();
         await expect(joinButton).toBeVisible({ timeout: 15000 });
-        // Check for error toast before clicking
-        const errorToast = this.page.locator('.toast-error, .text-destructive, :text("error")');
-        if (await errorToast.isVisible()) {
-            console.log('Found error toast before joining queue, attempting to dismiss or wait...');
-            await errorToast.click().catch(() => { });
-        }
-
         await joinButton.click({ force: true });
 
-        // Wait for ANY state change that indicates success using WaitManager
-        // Broaden the check to catch "Waiting", "position", etc.
-        await this.wait.waitForState(/You are in the queue|Ticket Offered|Active Offer|Ticket Reserved|Waiting for your turn|Your position/i, 20000);
+        const queueState = this.page
+            .getByText(/You are in the queue|Ticket Offered|Active Offer|Ticket Reserved|Waiting for your turn|Your position/i)
+            .first();
+        const rateLimitToast = this.page
+            .getByText(/Slow down there|joined the waiting list too many times|Please wait .*minutes/i)
+            .first();
+
+        // Wait until either success state or rate-limit toast is visible.
+        await Promise.race([
+            queueState.waitFor({ state: 'visible', timeout: 20000 }),
+            rateLimitToast.waitFor({ state: 'visible', timeout: 20000 }),
+        ]);
+
+        if (await rateLimitToast.isVisible()) {
+            throw new Error('Join queue blocked by rate limiter (Slow down there). Use a fresh test user.');
+        }
     }
 
     async verifyOfferReceived() {

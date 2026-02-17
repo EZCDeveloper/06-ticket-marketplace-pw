@@ -7,6 +7,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 export default defineConfig({
     testDir: './tests',
+    testIgnore: ['**/examples/**'],
 
     // Maximum time one test can run
     timeout: 30 * 1000,
@@ -53,13 +54,23 @@ export default defineConfig({
             testMatch: /auth\.setup\.ts/,
         },
         {
-            name: 'chromium',
+            name: 'smoke',
+            testMatch: /smoke\/.*\.spec\.ts/,
+            use: {
+                ...devices['Desktop Chrome'],
+                storageState: 'playwright/.auth/user.json',
+            },
+            dependencies: ['setup'],
+        },
+        {
+            name: 'My_Tests',
+            testIgnore: [/smoke\/.*\.spec\.ts/],
             use: {
                 ...devices['Desktop Chrome'],
                 // Use prepared auth state.
                 storageState: 'playwright/.auth/user.json',
             },
-            dependencies: ['setup'],
+            dependencies: ['smoke'],
         }
     ]
 });
