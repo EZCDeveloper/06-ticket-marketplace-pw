@@ -3,6 +3,7 @@ import { ResourceTracker } from '../support/cleanup/ResourceTracker';
 import { ConvexClient } from '../support/api/ConvexClient';
 import { Seller } from '../support/domain/Seller';
 import { Buyer } from '../support/domain/Buyer';
+import { injectVisualIndicators } from '../support/utils/visual-indicator';
 
 type DomainFixtures = {
     cleanup: ResourceTracker;
@@ -33,6 +34,14 @@ export const test = base.extend<DomainFixtures>({
             await tracker.cleanupAll(convex);
             console.log('✅ Cleanup completed');
         }
+    },
+
+    /**
+     * Page fixture - Extended with visual click indicator for tutorials
+     */
+    page: async ({ page }, use) => {
+        await injectVisualIndicators(page);
+        await use(page);
     },
 
     /**

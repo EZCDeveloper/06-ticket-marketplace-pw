@@ -2,20 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
 dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
-/**
- * Playwright Configuration - SaaS Turbo Template
- * 
- * This configuration embodies the "Quality Speed" philosophy:
- * - Fast execution with parallelization
- * - Reliable retries for flaky tests
- * - Clear reporting
- */
+
 export default defineConfig({
     testDir: './tests',
 
@@ -47,6 +36,14 @@ export default defineConfig({
         // Collect trace when retrying the failed test
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
+        viewport: { width: 1280, height: 720 },
+        video: {
+            mode: 'on',
+            size: { width: 1280, height: 720 }
+        },
+        launchOptions: {
+            slowMo: 1000,
+        }
     },
 
     // Configure projects for different browsers
@@ -63,24 +60,6 @@ export default defineConfig({
                 storageState: 'playwright/.auth/user.json',
             },
             dependencies: ['setup'],
-        },
-        // Uncomment to enable Firefox and WebKit
-        // {
-        //   name: 'firefox',
-        //   use: { ...devices['Desktop Firefox'], storageState: 'playwright/.auth/user.json' },
-        //   dependencies: ['setup'],
-        // },
-        // {
-        //   name: 'webkit',
-        //   use: { ...devices['Desktop Safari'], storageState: 'playwright/.auth/user.json' },
-        //   dependencies: ['setup'],
-        // },
-    ],
-
-    // Run local dev server before starting tests (optional)
-    // webServer: {
-    //   command: 'npm run dev',
-    //   url: 'http://localhost:3000',
-    //   reuseExistingServer: !process.env.CI,
-    // },
+        }
+    ]
 });

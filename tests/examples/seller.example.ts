@@ -20,9 +20,9 @@ test.describe('E2E: Seller Flow (Sample)', () => {
         await page.goto('/');
         await page.getByTestId('desktop-sign-in-button').click();
 
-        await page.getByPlaceholder('Enter your email address').fill('waltertestcustomer@gmail.com');
+        await page.getByPlaceholder('Enter your email address').fill('myemailhere@gmail.com');
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
-        await page.getByPlaceholder('Enter your password').fill('123***man');
+        await page.getByPlaceholder('Enter your password').fill('123456789');
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
 
         // ✅ ACT: Navigate to Seller Dashboard
