@@ -1,5 +1,6 @@
 import { BaseBuilder } from './BaseBuilder';
 import { faker } from '@faker-js/faker';
+import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
 
 export interface EventData {
     name: string;
@@ -29,7 +30,7 @@ export class EventBuilder extends BaseBuilder<EventData> {
             eventDate: futureDate,
             price: faker.number.int({ min: 10, max: 200 }),
             totalTickets: faker.number.int({ min: 1, max: 100 }),
-            userId: `user_${faker.string.alphanumeric(10)}`
+            userId: TEST_EVENT_OWNER_USER_ID,
         };
     }
 

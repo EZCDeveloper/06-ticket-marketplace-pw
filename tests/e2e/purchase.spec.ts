@@ -1,55 +1,67 @@
 import { test, expect } from '@/fixtures/base.fixtures';
 import { EventBuilder } from '@/support/builders/EventBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
+import { ClerkAdminClient } from '@/support/api/ClerkAdminClient';
+import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
 
 test.describe('E2E: Purchase Flow', () => {
-    test('[E2E-2.1.1] Join Queue and Receive Offer', async ({ buyer, convex, cleanup }) => {
+    test('[E2E-2.1.1] Join Queue and Receive Offer', async ({ buyer, convex, cleanup, request }) => {
         const eventData = new EventBuilder().build();
+        const clerkAdmin = new ClerkAdminClient(request);
+        let tempClerkUserId: string | undefined;
 
         let eventId: string;
-
-        await test.step('Step 1: Create an event via API', async () => {
-            // Create event via API to isolate Buyer test from Seller UI flakiness
-            eventId = await convex.mutation('events:create', {
-                name: eventData.name,
-                description: eventData.description,
-                location: eventData.location,
-                eventDate: eventData.eventDate,
-                price: eventData.price,
-                totalTickets: 1, // Only 1 ticket for this test
-                userId: "user_2tW6lJ6R1P6U6V6W6X6Y6Z6A6B" // Use a valid mock user ID or handle auth dynamically if needed
+        try {
+            await test.step('Step 1: Create an event via API', async () => {
+                // Create event via API to isolate Buyer test from Seller UI flakiness
+                eventId = await convex.mutation('events:create', {
+                    name: eventData.name,
+                    description: eventData.description,
+                    location: eventData.location,
+                    eventDate: eventData.eventDate,
+                    price: eventData.price,
+                    totalTickets: 1, // Only 1 ticket for this test
+                    userId: TEST_EVENT_OWNER_USER_ID,
+                });
+                cleanup.track('event', eventId);
             });
-            cleanup.track('event', eventId);
-        });
 
-        await test.step('Step 2: Navigate to Event Page', async () => {
-            await buyer.navigateToEvent(eventId);
-            await expect(buyer.page.getByTestId('event-detail-title')).toContainText(eventData.name);
-        });
+            await test.step('Step 2: Create temporary Clerk user and log in', async () => {
+                const tempUser = await clerkAdmin.createTempUser();
+                tempClerkUserId = tempUser.userId;
+                await buyer.loginWithClerkCredentials(tempUser.email, tempUser.password, 'temporary Clerk test user');
+                await buyer.navigateToEvent(eventId);
+                await expect(buyer.page.getByTestId('event-detail-title')).toContainText(eventData.name);
+            });
 
-        await test.step('Step 3: Join the queue', async () => {
-            await buyer.joinQueue();
-        });
+            await test.step('Step 3: Join the queue (success path)', async () => {
+                await buyer.joinQueueExpectSuccess();
+            });
 
-        await test.step('Step 4: Verify checkout transition state only (no Stripe flow assertion)', async () => {
-            await buyer.verifyOfferReceived();
+            await test.step('Step 4: Verify checkout transition state only (no Stripe flow assertion)', async () => {
+                await buyer.verifyOfferReceived();
 
-            const purchaseButton = buyer.page.getByTestId('purchase-ticket-button');
+                const purchaseButton = buyer.page.getByTestId('purchase-ticket-button');
 
-            await expect(purchaseButton).toBeEnabled();
-            await purchaseButton.click({ force: true });
-            await expect.soft(purchaseButton).toContainText(/Redirecting to checkout/i);
+                await expect(purchaseButton).toBeEnabled();
+                await purchaseButton.click({ force: true });
+                await expect.soft(purchaseButton).toContainText(/Redirecting to checkout/i);
 
-            // Avoid cross-test flakiness: ensure Stripe navigation does not remain in-flight.
-            await Promise.race([
-                buyer.page.waitForURL(/checkout\.stripe\.com/i, { timeout: 5000 }).catch(() => null),
-                buyer.page.waitForTimeout(500),
-            ]);
+                // Avoid cross-test flakiness: ensure Stripe navigation does not remain in-flight.
+                await Promise.race([
+                    buyer.page.waitForURL(/checkout\.stripe\.com/i, { timeout: 5000 }).catch(() => null),
+                    buyer.page.waitForTimeout(500),
+                ]);
 
-            if (/checkout\.stripe\.com/i.test(buyer.page.url())) {
-                await buyer.page.goto('/', { waitUntil: 'domcontentloaded' });
+                if (/checkout\.stripe\.com/i.test(buyer.page.url())) {
+                    await buyer.page.goto('/', { waitUntil: 'domcontentloaded' });
+                }
+            });
+        } finally {
+            if (tempClerkUserId) {
+                await clerkAdmin.deleteUser(tempClerkUserId);
             }
-        });
+        }
     });
 
     test('[E2E-2.1.2] Sold Out View', async ({ buyer, request, cleanup }) => {
@@ -79,18 +91,18 @@ test.describe('E2E: Purchase Flow', () => {
                 const eventData = new EventBuilder().withTickets(1).build();
                 const eventId = await convex.mutation('events:create', {
                     ...eventData,
-                    userId: "user_2tW6lJ6R1P6U6V6W6X6Y6Z6A6B"
+                    userId: TEST_EVENT_OWNER_USER_ID,
                 });
                 cleanup.track('event', eventId);
 
                 await buyer.navigateToEvent(eventId);
-                await buyer.page.getByTestId('buy-ticket-button').click({ force: true });
-
-                const toast = buyer.page.getByText(/Slow down there|joined the waiting list too many times|Please wait .*minutes/i).first();
-                if (await toast.isVisible({ timeout: 2500 }).catch(() => false)) {
+                await buyer.joinQueueExpectRateLimit(2500).then(() => {
                     rateLimitSeen = true;
-                    break;
-                }
+                }).catch(() => {
+                    // Rate limit not hit yet for this iteration.
+                });
+
+                if (rateLimitSeen) break;
             }
         });
 

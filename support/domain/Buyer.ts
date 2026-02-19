@@ -19,7 +19,44 @@ export class Buyer {
         await expect(this.page.getByTestId('event-detail-title')).toBeVisible({ timeout: 20000 });
     }
 
+    async loginWithClerkCredentials(email: string, password: string, label = 'test user') {
+        // Force signed-out state even if project storageState is preloaded.
+        await this.page.context().clearCookies();
+        await this.page.goto('/', { waitUntil: 'domcontentloaded' });
+        await this.page.evaluate(() => {
+            window.localStorage.clear();
+            window.sessionStorage.clear();
+        });
+        await this.page.goto('/', { waitUntil: 'domcontentloaded' });
+        await this.page.getByTestId('desktop-sign-in-button').click();
+        await this.page.getByPlaceholder('Enter your email address').fill(email);
+        await this.page.getByRole('button', { name: 'Continue', exact: true }).click();
+        await this.page.getByPlaceholder('Enter your password').fill(password);
+        await this.page.getByRole('button', { name: 'Continue', exact: true }).click();
+
+        const signedInIndicator = this.page.getByTestId('sell-tickets-button')
+            .or(this.page.getByTestId('my-tickets-button'))
+            .or(this.page.getByRole('button', { name: 'Open user menu' }))
+            .or(this.page.getByTestId('user-button'));
+        const invalidPasswordError = this.page.getByText(/Password is incorrect|Try again, or use another method/i).first();
+
+        await Promise.race([
+            signedInIndicator.first().waitFor({ state: 'visible', timeout: 15000 }),
+            invalidPasswordError.waitFor({ state: 'visible', timeout: 15000 }),
+        ]);
+
+        if (await invalidPasswordError.isVisible()) {
+            throw new Error(`Login failed for ${label} (${email}). Clerk reported invalid password.`);
+        }
+
+        await expect(signedInIndicator.first()).toBeVisible();
+    }
+
     async joinQueue() {
+        await this.joinQueueExpectSuccess();
+    }
+
+    async joinQueueExpectSuccess() {
         // Wait for loading to finish so button is attached
         await this.wait.waitForLoadingFinished();
         const joinButton = (this.page.getByTestId('buy-ticket-button').or(this.page.getByTestId('join-queue-button'))).first();
@@ -42,6 +79,19 @@ export class Buyer {
         if (await rateLimitToast.isVisible()) {
             throw new Error('Join queue blocked by rate limiter (Slow down there). Use a fresh test user.');
         }
+    }
+
+    async joinQueueExpectRateLimit(timeoutMs = 10000) {
+        await this.wait.waitForLoadingFinished();
+        const joinButton = (this.page.getByTestId('buy-ticket-button').or(this.page.getByTestId('join-queue-button'))).first();
+        await expect(joinButton).toBeVisible({ timeout: 15000 });
+        await joinButton.click({ force: true });
+
+        const rateLimitToast = this.page
+            .getByText(/Slow down there|joined the waiting list too many times|Please wait .*minutes/i)
+            .first();
+
+        await expect(rateLimitToast).toBeVisible({ timeout: timeoutMs });
     }
 
     async verifyOfferReceived() {
