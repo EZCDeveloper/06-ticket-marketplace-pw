@@ -1,6 +1,7 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext } from '@playwright/test';
 import { UserData } from '@/support/builders/UserBuilder';
 import { ConvexClient } from './ConvexClient';
+import { CONVEX_FN } from '../../config/convex-functions';
 
 /**
  * AuthClient - API client for authentication operations
@@ -22,7 +23,7 @@ export class AuthClient {
         // In this app, users are created/updated via users:updateUser
         const userId = `clerk_${userData.email.split('@')[0]}`;
 
-        await this.convex.mutation('users:updateUser', {
+        await this.convex.mutation(CONVEX_FN.users.updateUser, {
             userId,
             name: userData.name,
             email: userData.email

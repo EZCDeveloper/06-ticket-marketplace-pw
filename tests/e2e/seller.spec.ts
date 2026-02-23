@@ -1,10 +1,11 @@
 import { test, expect } from '@/fixtures/base.fixtures';
 import { EventBuilder } from '@/support/builders/EventBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
+import { CONVEX_FN } from '@config/convex-functions';
 
 test.describe('E2E: Seller Flow', () => {
 
-    test('[E2E-3.1.1] Create New Event via Dashboard', async ({ seller, cleanup, request }) => {
+    test('[E2E-3.1.1] Create New Event via Dashboard', { tag: ['@events', '@critical'] }, async ({ seller, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
 
@@ -23,7 +24,7 @@ test.describe('E2E: Seller Flow', () => {
             await seller.verifyEventVisible(eventData.name);
 
             // Capture ID for cleanup
-            const events = await convex.query('events:get', {});
+            const events = await convex.query(CONVEX_FN.events.get, {});
             const createdEvent = events.find((e: any) => e.name === eventData.name);
             if (createdEvent) {
                 cleanup.track('event', createdEvent._id);

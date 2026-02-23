@@ -10,7 +10,7 @@ import { AuthClient } from '@/support/api/AuthClient';
  */
 test.describe('API: Authentication', () => {
 
-    test('[API-1.1.1] User Registration - Success', async ({ request, cleanup }) => {
+    test('[API-1.1.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
         let user: any;
@@ -27,12 +27,7 @@ test.describe('API: Authentication', () => {
         });
     });
 
-    test('[API-1.1.2] User Registration - Logic Check', async ({ request }) => {
-        // Skip negative test as it was based on non-existent endpoint
-        test.skip(true, 'Negative test for legacy endpoint');
-    });
-
-    test('[API-1.2.1] User Login - Success', async ({ request, cleanup }) => {
+    test('[API-1.2.1] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
 

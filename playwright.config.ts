@@ -4,73 +4,83 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
+const isCI = !!process.env.CI;
 
 export default defineConfig({
     testDir: './tests',
     testIgnore: ['**/examples/**'],
 
-    // Maximum time one test can run
-    timeout: 30 * 1000,
-
-    // Test configuration
     fullyParallel: true,
-    forbidOnly: !!process.env.CI,
-    retries: process.env.CI ? 2 : 0,
-    workers: process.env.CI ? 1 : undefined,
+    forbidOnly: isCI,
+    retries: isCI ? 2 : 0,
+    workers: isCI ? (process.env.CI_WORKERS ? parseInt(process.env.CI_WORKERS) : 4) : undefined,
 
-    // Reporter configuration
-    reporter: [
-        ['html'],
-        ['list']
-    ],
+    reporter: isCI
+        ? [['github'], ['html', { open: 'never' }]]
+        : [['html'], ['list']],
 
-    // Shared settings for all projects
     use: {
-        // Base URL for tests
         baseURL: process.env.BASE_URL || 'http://localhost:3000',
-
-        // API base URL
         extraHTTPHeaders: {
             'Accept': 'application/json',
         },
-
-        // Collect trace when retrying the failed test
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
         viewport: { width: 1280, height: 720 },
+        // In CI only keep recordings for failed tests to save time and storage.
+        // Locally, keep recordings always on for demo/tutorial videos.
         video: {
-            mode: 'on',
-            size: { width: 1280, height: 720 }
+            mode: isCI ? 'retain-on-failure' : 'on',
+            size: { width: 1280, height: 720 },
         },
+        // slowMo is only useful when recording tutorial videos locally.
+        // Never slow down tests in CI or regular local runs.
         launchOptions: {
-            slowMo: 1000,
-        }
+            slowMo: process.env.SLOW_MO ? parseInt(process.env.SLOW_MO) : 0,
+        },
     },
 
-    // Configure projects for different browsers
     projects: [
+        // ─── Auth setup (runs once, saves storageState) ───────────────────────
         {
             name: 'setup',
             testMatch: /auth\.setup\.ts/,
         },
+
+        // ─── Smoke: fast health checks (~15s), fail fast ──────────────────────
         {
             name: 'smoke',
             testMatch: /smoke\/.*\.spec\.ts/,
+            timeout: 15_000,
             use: {
                 ...devices['Desktop Chrome'],
                 storageState: 'playwright/.auth/user.json',
             },
             dependencies: ['setup'],
         },
+
+        // ─── API: business logic validation (~10s), no browser overhead ───────
         {
-            name: 'My_Tests',
-            testIgnore: [/smoke\/.*\.spec\.ts/],
+            name: 'api',
+            testMatch: /api\/.*\.spec\.ts/,
+            timeout: 10_000,
             use: {
                 ...devices['Desktop Chrome'],
-                // Use prepared auth state.
                 storageState: 'playwright/.auth/user.json',
             },
             dependencies: ['smoke'],
-        }
-    ]
+        },
+
+        // ─── E2E: critical user journeys (~60s), real browser ─────────────────
+        {
+            name: 'e2e',
+            testMatch: /e2e\/.*\.spec\.ts/,
+            timeout: 60_000,
+            use: {
+                ...devices['Desktop Chrome'],
+                storageState: 'playwright/.auth/user.json',
+            },
+            dependencies: ['smoke'],
+        },
+    ],
 });

@@ -1,5 +1,6 @@
 import { APIRequestContext } from '@playwright/test';
 import { ConvexClient } from '../api/ConvexClient';
+import { CONVEX_FN } from '../../config/convex-functions';
 
 export type ResourceType = 'user' | 'item' | 'event' | string;
 
@@ -64,11 +65,9 @@ export class ResourceTracker {
     }
 
     private async cleanupResource(convex: ConvexClient, resource: TrackedResource): Promise<void> {
-        // Map types to mutations
         switch (resource.type) {
             case 'event':
-                // Using cancelEvent as cleanup for now, or use a specific delete mutation if available
-                await convex.mutation('events:cancelEvent', { eventId: resource.id });
+                await convex.mutation(CONVEX_FN.events.cancelEvent, { eventId: resource.id });
                 break;
             default:
                 console.warn(`⚠️  No cleanup handler for resource type: ${resource.type}`);

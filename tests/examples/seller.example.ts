@@ -1,54 +1,45 @@
 import { test, expect } from '@/fixtures/base.fixtures';
 import { EventBuilder } from '@/support/builders/EventBuilder';
+import { ClerkLoginForm } from '@/support/components/ClerkLoginForm';
+import { EventForm } from '@/support/components/EventForm';
 
 /**
  * 🎓 EDUCATIONAL SAMPLE: Seller Flow
- * 
- * This file is a reference for students. It is named '.example.ts' 
- * and located in 'tests/examples' so Playwright ignores it during 
- * regular test runs.
- * 
- * Verifies that a seller can:
- * 1. Access the seller dashboard
- * 2. Create a new event
- * 3. View their events
+ *
+ * This file is a reference for new contributors. It is named `.example.ts`
+ * and lives in `tests/examples/` so Playwright ignores it during all test runs.
+ *
+ * It shows the three-layer model in action:
+ *   Test → Domain Actor (Seller) → Component (EventForm) → Playwright locators
+ *
+ * For real tests, use the Seller domain actor from base.fixtures
+ * instead of calling components directly (see tests/e2e/seller.spec.ts).
  */
 test.describe('E2E: Seller Flow (Sample)', () => {
 
     test('[SAMPLE] Create New Event via Dashboard', async ({ page }) => {
-        // ✅ ARRANGE: Use demo credentials for seller login
+
+        // ARRANGE: Log in using the ClerkLoginForm component.
+        // In production tests, use pre-authenticated storageState instead.
         await page.goto('/');
-        await page.getByTestId('desktop-sign-in-button').click();
+        const loginForm = new ClerkLoginForm(page);
+        await loginForm.fillAndSubmit('myemailhere@gmail.com', '123456789');
 
-        await page.getByPlaceholder('Enter your email address').fill('myemailhere@gmail.com');
-        await page.getByRole('button', { name: 'Continue', exact: true }).click();
-        await page.getByPlaceholder('Enter your password').fill('123456789');
-        await page.getByRole('button', { name: 'Continue', exact: true }).click();
-
-        // ✅ ACT: Navigate to Seller Dashboard
-        // Clicking the explicit 'Sell Tickets' button in the header
+        // ACT: Navigate to seller dashboard and open the event creation form.
         await page.getByTestId('sell-tickets-button').click();
-
         await expect(page).toHaveURL(/\/seller/);
+        await page.getByTestId('create-event-button').click();
 
-        // Click create event button
-        await page.getByTestId('create-event-button').or(page.getByRole('button', { name: /Create Event/i })).click();
-
-        // Fill form using data-testids
+        // Fill and submit the form using the EventForm component.
         const eventData = new EventBuilder().build();
-        await page.getByTestId('event-name-input').fill(eventData.name);
-        await page.getByTestId('event-description-input').fill(eventData.description);
-        await page.getByTestId('event-location-input').fill(eventData.location);
-        await page.getByTestId('event-price-input').fill(eventData.price.toString());
-        await page.getByTestId('event-tickets-input').fill(eventData.totalTickets.toString());
+        const eventForm = new EventForm(page);
+        await eventForm.fill({
+            ...eventData,
+            eventDate: new Date(eventData.eventDate),
+        });
+        await eventForm.submit();
 
-        // Date input using data-testid
-        const eventDateStr = new Date(eventData.eventDate).toISOString().split('T')[0];
-        await page.getByTestId('event-date-input').fill(eventDateStr);
-
-        await page.getByTestId('event-form-submit-button').click();
-
-        // ✅ ASSERT: Event is created and visible in dashboard
+        // ASSERT: Event is created and visible on the event page.
         await expect(page.getByTestId('event-title').filter({ hasText: eventData.name })).toBeVisible({ timeout: 15000 });
     });
 });

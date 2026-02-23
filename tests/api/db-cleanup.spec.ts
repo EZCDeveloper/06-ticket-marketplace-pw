@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { ConvexClient } from '@/support/api/ConvexClient';
+import { CONVEX_FN } from '@config/convex-functions';
 
 /**
  * [DB-CLEANUP] Database Cleanup Utilities
@@ -33,7 +34,7 @@ test.describe('Utility: Database Cleanup', () => {
 
         try {
             // ✅ ACT: Call the cleanup mutation
-            const result = await convex.mutation('dbCleanup:removeEventAndTickets', { eventId });
+            const result = await convex.mutation(CONVEX_FN.dbCleanup.removeEventAndTickets, { eventId });
 
             // Check if result is valid
             if (!result) {
@@ -70,7 +71,7 @@ test.describe('Utility: Database Cleanup', () => {
         process.stdout.write(`\n🧹 Cleaning up tickets between ${startDateStr} and ${endDateStr}...\n`);
 
         // ✅ ACT: Call the cleanup mutation
-        const result = await convex.mutation('dbCleanup:removeTicketsByDate', { startDate, endDate });
+        const result = await convex.mutation(CONVEX_FN.dbCleanup.removeTicketsByDate, { startDate, endDate });
 
         // ✅ ASSERT: Success and log result
         expect(result.success).toBe(true);

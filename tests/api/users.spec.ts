@@ -1,19 +1,20 @@
 import { test, expect } from '@/fixtures/base.fixtures';
 import { UserBuilder } from '@/support/builders/UserBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
+import { CONVEX_FN } from '@config/convex-functions';
 
 /**
  * [API-1] User API Tests
  */
 test.describe('API: User Profile', () => {
 
-    test('[API-1.1.1] Create/Update User Profile', async ({ request, cleanup }) => {
+    test('[API-1.1.1] Create/Update User Profile', { tag: ['@users'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const userData = new UserBuilder().build();
         const userId = `clerk_${userData.email.split('@')[0]}`;
 
         await test.step('Step 1: Call updateUser mutation via API', async () => {
-            const result = await convex.mutation('users:updateUser', {
+            const result = await convex.mutation(CONVEX_FN.users.updateUser, {
                 userId,
                 name: userData.name,
                 email: userData.email
@@ -23,7 +24,7 @@ test.describe('API: User Profile', () => {
         });
 
         await test.step('Step 2: Verify user data via query', async () => {
-            const user = await convex.query('users:getUserById', { userId });
+            const user = await convex.query(CONVEX_FN.users.getUserById, { userId });
             expect(user.name).toBe(userData.name);
             expect(user.email).toBe(userData.email);
         });

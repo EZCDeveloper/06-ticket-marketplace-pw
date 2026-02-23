@@ -3,9 +3,10 @@ import { EventBuilder } from '@/support/builders/EventBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
 import { ClerkAdminClient } from '@/support/api/ClerkAdminClient';
 import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
+import { CONVEX_FN } from '@config/convex-functions';
 
 test.describe('E2E: Purchase Flow', () => {
-    test('[E2E-2.1.1] Join Queue and Receive Offer', async ({ buyer, convex, cleanup, request }) => {
+    test('[E2E-2.1.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical'] }, async ({ buyer, convex, cleanup, request }) => {
         const eventData = new EventBuilder().build();
         const clerkAdmin = new ClerkAdminClient(request);
         let tempClerkUserId: string | undefined;
@@ -14,7 +15,7 @@ test.describe('E2E: Purchase Flow', () => {
         try {
             await test.step('Step 1: Create an event via API', async () => {
                 // Create event via API to isolate Buyer test from Seller UI flakiness
-                eventId = await convex.mutation('events:create', {
+                eventId = await convex.mutation(CONVEX_FN.events.create, {
                     name: eventData.name,
                     description: eventData.description,
                     location: eventData.location,
@@ -64,13 +65,13 @@ test.describe('E2E: Purchase Flow', () => {
         }
     });
 
-    test('[E2E-2.1.2] Sold Out View', async ({ buyer, request, cleanup }) => {
+    test('[E2E-2.1.2] Sold Out View', { tag: ['@queue'] }, async ({ buyer, request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(0).build();
         let eventId: string;
 
         await test.step('Step 1: Create a sold out event', async () => {
-            eventId = await convex.mutation('events:create', eventData);
+            eventId = await convex.mutation(CONVEX_FN.events.create, eventData);
             cleanup.track('event', eventId);
         });
 
@@ -83,13 +84,13 @@ test.describe('E2E: Purchase Flow', () => {
         });
     });
 
-    test('[E2E-2.1.3] Rate Limit Warning on Excessive Queue Attempts', async ({ buyer, convex, cleanup }) => {
+    test('[E2E-2.1.3] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative'] }, async ({ buyer, convex, cleanup }) => {
         let rateLimitSeen = false;
 
         await test.step('Step 1: Attempt joins across events until rate limit appears', async () => {
             for (let i = 0; i < 4; i++) {
                 const eventData = new EventBuilder().withTickets(1).build();
-                const eventId = await convex.mutation('events:create', {
+                const eventId = await convex.mutation(CONVEX_FN.events.create, {
                     ...eventData,
                     userId: TEST_EVENT_OWNER_USER_ID,
                 });
@@ -111,7 +112,7 @@ test.describe('E2E: Purchase Flow', () => {
         });
     });
 
-    test.skip('[E2E-2.1.4] Two Buyers Compete for Last Ticket (PENDING)', async () => {
+    test.skip('[E2E-2.1.4] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow'] }, async () => {
         /**
          * PENDING: Multi-user visual concurrency scenario.
          *
