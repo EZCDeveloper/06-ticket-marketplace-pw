@@ -14,8 +14,8 @@
         "test:debug": "env -u NO_COLOR playwright test --debug",
         "report": "playwright show-report",
         "ui": "env -u NO_COLOR playwright test --ui",
-        "cleanup": "env -u NO_COLOR playwright test tests/api/db-cleanup.spec.ts --project=api --reporter=line",
-        "cleanup:ui": "env -u NO_COLOR playwright test tests/api/db-cleanup.spec.ts --ui",
+        "cleanup": "env -u NO_COLOR playwright test tests/scripts/db-cleanup.spec.ts --project=scripts --reporter=line",
+        "cleanup:ui": "env -u NO_COLOR playwright test tests/scripts/db-cleanup.spec.ts --project=scripts --ui",
         "record:login": "rm -rf test-results/e2e-login*; SLOW_MO=800 env -u NO_COLOR npx playwright test tests/e2e/login.spec.ts -g 'Complete Login Journey' --project=e2e; mkdir -p playwright/video; mv test-results/e2e-login*/video.webm playwright/video/login-test.webm",
         "record:seller": "rm -rf test-results/e2e-seller*; SLOW_MO=800 env -u NO_COLOR npx playwright test tests/e2e/seller.spec.ts -g 'Create New Event via Dashboard' --project=e2e; mkdir -p playwright/video; mv test-results/e2e-seller*/video.webm playwright/video/seller-test.webm",
         "record:purchase": "rm -rf test-results/e2e-purchase*; SLOW_MO=800 env -u NO_COLOR npx playwright test tests/e2e/purchase.spec.ts -g 'Join Queue and Receive Offer' --project=e2e; mkdir -p playwright/video; mv test-results/e2e-purchase*/video.webm playwright/video/purchase-test.webm"

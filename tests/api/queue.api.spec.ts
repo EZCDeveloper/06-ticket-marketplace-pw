@@ -4,11 +4,11 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * [API-3] Queue Logic API Tests
+ * [API - 3] Queue Logic API Tests
  */
-test.describe('API: Queue Logic', () => {
+test.describe('API - 3: Queue Logic', () => {
 
-    test('[API-3.1.1] Join Searching Queue (FIFO Validation)', { tag: ['@queue', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API - 3.1] Join Searching Queue (FIFO Validation)', { tag: ['@queue', '@critical'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
         let eventId: string;
@@ -37,7 +37,7 @@ test.describe('API: Queue Logic', () => {
         });
     });
 
-    test('[API-3.1.3] Sold Out Prevention', { tag: ['@queue', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API - 3.2] Sold Out Prevention', { tag: ['@queue', '@critical'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
         let eventId: string;

@@ -4,11 +4,11 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * [API-2] Event Management API Tests
+ * [API - 2] Event Management API Tests
  */
-test.describe('API: Event Management', () => {
+test.describe('API - 2: Event Management', () => {
 
-    test('[API-2.1.1] Create New Event (Happy Path)', { tag: ['@events', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API - 2.1] Create New Event (Happy Path)', { tag: ['@events', '@critical'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;
@@ -26,7 +26,7 @@ test.describe('API: Event Management', () => {
         });
     });
 
-    test('[API-2.1.2] Cancel Event', { tag: ['@events'] }, async ({ request, cleanup }) => {
+    test('[API - 2.2] Cancel Event', { tag: ['@events'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;
@@ -47,7 +47,7 @@ test.describe('API: Event Management', () => {
         });
     });
 
-    test('[API-2.1.3] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative'] }, async ({ request, cleanup }) => {
+    test('[API - 2.3] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         let eventId: string;

@@ -8,9 +8,9 @@ import { AuthClient } from '@/support/api/AuthClient';
  * These tests validate the authentication API endpoints.
  * They are fast, reliable, and form the foundation of your test suite (70%).
  */
-test.describe('API: Authentication', () => {
+test.describe('API - 1: Authentication', () => {
 
-    test('[API-1.1.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
+    test('[API - 1.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
         let user: any;
@@ -27,7 +27,7 @@ test.describe('API: Authentication', () => {
         });
     });
 
-    test('[API-1.2.1] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API - 1.2] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
 

@@ -4,11 +4,11 @@ import { EventBuilder } from '@/support/builders/EventBuilder';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * [API-4] Stripe Integration API Tests
+ * [API - 4] Stripe Integration API Tests
  */
-test.describe('API: Stripe Integration', () => {
+test.describe('API - 4: Stripe Integration', () => {
 
-    test('[API-4.1.2] Handle Webhook: checkout.session.completed', { tag: ['@billing'] }, async ({ request, cleanup }) => {
+    test('[API - 4.1] Handle Webhook: checkout.session.completed', { tag: ['@billing'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         const userId = `clerk_user_${Date.now()}`;

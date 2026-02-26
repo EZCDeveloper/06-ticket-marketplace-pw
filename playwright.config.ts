@@ -82,5 +82,15 @@ export default defineConfig({
             },
             dependencies: ['smoke'],
         },
+
+        // ─── Scripts: manual maintenance tasks, run explicitly only ───────────
+        {
+            name: 'scripts',
+            testMatch: /scripts\/.*\.spec\.ts/,
+            timeout: 30_000,
+            use: {
+                storageState: 'playwright/.auth/user.json',
+            },
+        },
     ],
 });

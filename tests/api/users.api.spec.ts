@@ -4,11 +4,11 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * [API-1] User API Tests
+ * [API - 5] User API Tests
  */
-test.describe('API: User Profile', () => {
+test.describe('API- 5: User Profile', () => {
 
-    test('[API-1.1.1] Create/Update User Profile', { tag: ['@users'] }, async ({ request, cleanup }) => {
+    test('[API - 5.1] Create/Update User Profile', { tag: ['@users'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const userData = new UserBuilder().build();
         const userId = `clerk_${userData.email.split('@')[0]}`;
