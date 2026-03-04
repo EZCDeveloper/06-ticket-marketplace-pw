@@ -3,9 +3,9 @@ import { EventBuilder } from '@/support/builders/EventBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
-test.describe('E2E - 3: Seller Flow', () => {
+test.describe('E2E - 2: Events (seller flow)', () => {
 
-    test('[E2E - 3.1] Create New Event via Dashboard', { tag: ['@events', '@critical'] }, async ({ seller, cleanup, request }) => {
+    test('[E2E - 2.1] Create New Event via Dashboard', { tag: ['@events', '@critical'] }, async ({ seller, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
 

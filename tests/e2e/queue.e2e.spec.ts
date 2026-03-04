@@ -5,8 +5,9 @@ import { ClerkAdminClient } from '@/support/api/ClerkAdminClient';
 import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
 import { CONVEX_FN } from '@config/convex-functions';
 
-test.describe('E2E - 2: Purchase Flow', () => {
-    test('[E2E - 2.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical'] }, async ({ buyer, convex, cleanup, request }) => {
+test.describe('E2E - 3: Queue (buyer flow)', () => {
+
+    test('[E2E - 3.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical'] }, async ({ buyer, convex, cleanup, request }) => {
         const eventData = new EventBuilder().build();
         const clerkAdmin = new ClerkAdminClient(request);
         let tempClerkUserId: string | undefined;
@@ -65,7 +66,7 @@ test.describe('E2E - 2: Purchase Flow', () => {
         }
     });
 
-    test('[E2E - 2.2] Sold Out View', { tag: ['@queue'] }, async ({ buyer, request, cleanup }) => {
+    test('[E2E - 3.2] Sold Out View', { tag: ['@queue'] }, async ({ buyer, request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(0).build();
         let eventId: string;
@@ -84,7 +85,7 @@ test.describe('E2E - 2: Purchase Flow', () => {
         });
     });
 
-    test('[E2E - 2.3] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative'] }, async ({ buyer, convex, cleanup }) => {
+    test('[E2E - 3.3] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative'] }, async ({ buyer, convex, cleanup }) => {
         let rateLimitSeen = false;
 
         await test.step('Step 1: Attempt joins across events until rate limit appears', async () => {
@@ -112,7 +113,7 @@ test.describe('E2E - 2: Purchase Flow', () => {
         });
     });
 
-    test.skip('[E2E - 2.4] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow'] }, async () => {
+    test.skip('[E2E - 3.4] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow'] }, async () => {
         /**
          * PENDING: Multi-user visual concurrency scenario.
          *
