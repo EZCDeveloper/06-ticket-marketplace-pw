@@ -71,4 +71,38 @@ export class Buyer {
         const queue = new QueueWidget(this.page);
         await queue.expectSoldOut();
     }
+
+    /** Navigates to /tickets and waits for the page heading. */
+    async navigateToMyTickets(): Promise<void> {
+        await this.page.goto('/tickets');
+        await expect(this.page.getByTestId('my-tickets-title')).toBeVisible({ timeout: 15000 });
+    }
+
+    /**
+     * Asserts that the ticket QR code is visible on the current ticket detail page.
+     * The QR renders as an SVG inside data-testid="ticket-qr-code".
+     */
+    async verifyQrCodeVisible(): Promise<void> {
+        await expect(this.page.getByTestId('ticket-qr-code')).toBeVisible({ timeout: 10000 });
+    }
+
+    /**
+     * Asserts that the ticket detail page reflects a cancelled event:
+     * the cancellation notice is shown and the status badge reads "Cancelled".
+     */
+    async verifyTicketCancelled(): Promise<void> {
+        await expect(this.page.getByTestId('event-cancelled-notice')).toBeVisible({ timeout: 10000 });
+        await expect(this.page.getByTestId('ticket-status')).toContainText('Cancelled');
+    }
+
+    /**
+     * Asserts that the My Tickets list shows the expected total count.
+     * Matches against the data-testid="total-tickets-count" element which renders
+     * "{n} Total Tickets".
+     */
+    async verifyTicketsCount(expectedCount: number): Promise<void> {
+        await expect(this.page.getByTestId('total-tickets-count')).toContainText(
+            `${expectedCount} Total Ticket`
+        );
+    }
 }

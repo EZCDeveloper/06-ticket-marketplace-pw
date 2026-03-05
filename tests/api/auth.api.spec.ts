@@ -3,14 +3,16 @@ import { UserBuilder } from '@/support/builders/UserBuilder';
 import { AuthClient } from '@/support/api/AuthClient';
 
 /**
- * API Tests - Authentication
- * 
- * These tests validate the authentication API endpoints.
- * They are fast, reliable, and form the foundation of your test suite (70%).
+ * Auth | API Tests — Authentication
+ *
+ * Authentication is the foundational flow — it gates all other user flows.
+ * A failure here means flows 1-5 cannot execute.
+ *
+ * @see ABOUT_APPLICATION.md — Key User Flows (auth is a prerequisite for all)
  */
-test.describe('API - 1: Authentication', () => {
+test.describe('Auth | API: Authentication', () => {
 
-    test('[API - 1.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
+    test('[API-AUTH.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
         let user: any;
@@ -27,7 +29,7 @@ test.describe('API - 1: Authentication', () => {
         });
     });
 
-    test('[API - 1.2] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API-AUTH.2] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
 

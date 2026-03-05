@@ -2,16 +2,18 @@ import { test, expect } from '@/fixtures/base.fixtures';
 import { ClerkLoginForm } from '@/support/components/ClerkLoginForm';
 
 /**
- * E2E Tests - Login Flow
+ * Auth | E2E Tests — Authentication
  *
- * Validates the complete user login journey through the UI.
- * Uses ClerkLoginForm component directly — this spec IS testing the component.
+ * Authentication is the foundational flow — it gates all other user flows.
+ * A failure here means flows 1-5 cannot execute.
+ *
+ * @see ABOUT_APPLICATION.md — Key User Flows (auth is a prerequisite for all)
  */
-test.describe('E2E - 1: Login Flow', () => {
+test.describe('Auth | E2E: Authentication', () => {
 
     test.use({ storageState: { cookies: [], origins: [] } });
 
-    test('[E2E - 1.1] Complete Login Journey', { tag: ['@auth', '@critical'] }, async ({ page }) => {
+    test('[E2E-AUTH.1] Complete Login Journey', { tag: ['@auth', '@critical'] }, async ({ page }) => {
         const email = process.env.TEST_USER_EMAIL!;
         const password = process.env.TEST_USER_PASSWORD!;
 
@@ -32,7 +34,7 @@ test.describe('E2E - 1: Login Flow', () => {
         });
     });
 
-    test.skip('[E2E - 1.2] Login with Invalid Credentials', { tag: ['@auth', '@negative'] }, async ({ page }) => {
+    test.skip('[E2E-AUTH.2] Login with Invalid Credentials', { tag: ['@auth', '@negative'] }, async ({ page }) => {
         /**
          * PENDING: Implement once the negative credential path is confirmed.
          * Use ClerkLoginForm.fillAndSubmit() + expectEmailFieldVisible() / error assertion.

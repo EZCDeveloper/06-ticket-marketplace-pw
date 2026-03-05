@@ -3,9 +3,19 @@ import { EventBuilder } from '@/support/builders/EventBuilder';
 import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
-test.describe('E2E - 2: Events (seller flow)', () => {
+/**
+ * Flow 2 | E2E Tests — Event Creation (Seller)
+ *
+ * Validates the complete seller creation journey through the UI:
+ * User → Sign In → Seller Dashboard → Create New Event →
+ * Fill Event Details → Upload Image (optional) → Set Pricing & Capacity →
+ * Publish Event → Manage Sales & Analytics
+ *
+ * @see ABOUT_APPLICATION.md — Flow 2: Event Creation Flow (Seller)
+ */
+test.describe('Flow 2 | E2E: Event Creation (Seller)', () => {
 
-    test('[E2E - 2.1] Create New Event via Dashboard', { tag: ['@events', '@critical'] }, async ({ seller, cleanup, request }) => {
+    test('[F2-E2E-1] Create New Event via Dashboard', { tag: ['@events', '@critical', '@flow-2'] }, async ({ seller, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
 
@@ -23,7 +33,6 @@ test.describe('E2E - 2: Events (seller flow)', () => {
         await test.step('Step 3: Verify event creation and track for cleanup', async () => {
             await seller.verifyEventVisible(eventData.name);
 
-            // Capture ID for cleanup
             const events = await convex.query(CONVEX_FN.events.get, {});
             const createdEvent = events.find((e: any) => e.name === eventData.name);
             if (createdEvent) {

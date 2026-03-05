@@ -4,11 +4,17 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * [API - 2] Event Management API Tests
+ * Flow 2 | API Tests — Event Creation (Seller)
+ *
+ * Covers the business logic for the seller creation flow:
+ * User → Sign In → Seller Dashboard → Create New Event →
+ * Fill Event Details → Upload Image → Set Pricing & Capacity → Publish Event
+ *
+ * @see ABOUT_APPLICATION.md — Flow 2: Event Creation Flow (Seller)
  */
-test.describe('API - 2: Event Management', () => {
+test.describe('Flow 2 | API: Event Creation', () => {
 
-    test('[API - 2.1] Create New Event (Happy Path)', { tag: ['@events', '@critical'] }, async ({ request, cleanup }) => {
+    test('[F2-API-1] Create New Event (Happy Path)', { tag: ['@events', '@critical', '@flow-2'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;
@@ -26,33 +32,12 @@ test.describe('API - 2: Event Management', () => {
         });
     });
 
-    test('[API - 2.2] Cancel Event', { tag: ['@events'] }, async ({ request, cleanup }) => {
-        const convex = new ConvexClient(request);
-        const eventData = new EventBuilder().build();
-        let eventId: string;
-
-        await test.step('Step 1: Create an event', async () => {
-            eventId = await convex.mutation(CONVEX_FN.events.create, eventData);
-            cleanup.track('event', eventId);
-        });
-
-        await test.step('Step 2: Cancel the event', async () => {
-            const result = await convex.mutation(CONVEX_FN.events.cancelEvent, { eventId });
-            expect(result.success).toBe(true);
-        });
-
-        await test.step('Step 3: Verify event status is cancelled', async () => {
-            const event = await convex.query(CONVEX_FN.events.getById, { eventId });
-            expect(event.is_cancelled).toBe(true);
-        });
-    });
-
-    test('[API - 2.3] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative'] }, async ({ request, cleanup }) => {
+    test('[F2-API-2] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative', '@flow-2'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         let eventId: string;
 
-        await test.step('Step 1: Create event', async () => {
+        await test.step('Step 1: Create event with 10 tickets', async () => {
             eventId = await convex.mutation(CONVEX_FN.events.create, eventData);
             cleanup.track('event', eventId);
         });

@@ -37,4 +37,31 @@ export class Seller {
     async verifyEventVisible(eventName: string): Promise<void> {
         await expect(this.page.getByText(eventName).first()).toBeVisible();
     }
+
+    async navigateToEvent(eventId: string): Promise<void> {
+        await this.page.goto(`/event/${eventId}`);
+        await expect(this.page.getByTestId('event-detail-title')).toBeVisible({ timeout: 15000 });
+    }
+
+    /**
+     * Clicks the "Cancel Event" button and accepts the native confirm() dialog.
+     * Waits for networkidle so the Convex mutation settles before the caller proceeds.
+     */
+    async cancelCurrentEvent(): Promise<void> {
+        this.page.once('dialog', dialog => dialog.accept());
+        await this.page.getByTestId('cancel-event-button').click();
+        await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+    }
+
+    /**
+     * Navigates to /seller/events and asserts the event card shows the
+     * "Event Cancelled & Refunded" badge.
+     */
+    async verifyEventCancelledInList(eventId: string): Promise<void> {
+        await this.page.goto('/seller/events');
+        await expect(this.page.getByTestId('my-events-page-title')).toBeVisible({ timeout: 15000 });
+        const eventCard = this.page.getByTestId(`seller-event-card-${eventId}`);
+        await expect(eventCard).toBeVisible({ timeout: 10000 });
+        await expect(eventCard.getByTestId('event-cancelled-status')).toBeVisible({ timeout: 10000 });
+    }
 }
