@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { ConvexClient } from '../api/ConvexClient';
 import { WaitManager } from '../utils/WaitManager';
 import { ClerkLoginForm } from '../components/ClerkLoginForm';
@@ -87,11 +87,13 @@ export class Buyer {
     }
 
     /**
-     * Asserts that the ticket detail page reflects a cancelled event:
-     * the cancellation notice is shown and the status badge reads "Cancelled".
+     * Asserts that the My Tickets LIST page reflects a cancelled event.
+     * TicketCard renders both testids on /tickets — no navigation to the detail needed.
+     *   • event-cancelled-message → "Event Cancelled" badge (only when is_cancelled)
+     *   • ticket-status           → "Cancelled" (overrides the normal status text)
      */
     async verifyTicketCancelled(): Promise<void> {
-        await expect(this.page.getByTestId('event-cancelled-notice')).toBeVisible({ timeout: 10000 });
+        await expect(this.page.getByTestId('event-cancelled-message')).toBeVisible({ timeout: 10000 });
         await expect(this.page.getByTestId('ticket-status')).toContainText('Cancelled');
     }
 
