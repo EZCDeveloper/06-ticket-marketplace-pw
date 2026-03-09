@@ -4,18 +4,18 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * Flow 2 | E2E Tests — Event Creation (Seller)
+ * FLOW 3 | E2E - 3: Event Creation (Seller)
  *
  * Validates the complete seller creation journey through the UI:
  * User → Sign In → Seller Dashboard → Create New Event →
  * Fill Event Details → Upload Image (optional) → Set Pricing & Capacity →
  * Publish Event → Manage Sales & Analytics
  *
- * @see ABOUT_APPLICATION.md — Flow 2: Event Creation Flow (Seller)
+ * @see ABOUT_APPLICATION.md — E2E - 3: Event Creation (Seller)
  */
-test.describe('Flow 2 | E2E: Event Creation (Seller)', () => {
+test.describe('E2E - 3: Event Creation (Seller)', () => {
 
-    test('[F2-E2E-1] Create New Event via Dashboard', { tag: ['@events', '@critical', '@flow-2'] }, async ({ seller, cleanup, request }) => {
+    test('[E2E - 3.1] Create New Event via Dashboard', { tag: ['@events', '@critical', '@flow-2'] }, async ({ seller, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
 

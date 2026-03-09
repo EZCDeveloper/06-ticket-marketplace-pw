@@ -4,17 +4,17 @@ import { EventBuilder } from '@/support/builders/EventBuilder';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * Flow 1 | API Tests — Event Discovery & Purchase
+ * FLOW 2 | API - 2: Event Discovery & Purchase
  *
  * Covers the business logic for the purchase flow:
  * Guest/User → Browse Events → View Event Details → Sign In →
  * Join Queue → Receive Offer → Complete Payment → Receive Ticket → QR Code
  *
- * @see ABOUT_APPLICATION.md — Flow 1: Event Discovery & Purchase Flow
+ * @see ABOUT_APPLICATION.md — API -    : Event Discovery & Purchase
  */
-test.describe('Flow 1 | API: Event Discovery & Purchase', () => {
+test.describe('API - 2: Event Discovery & Purchase', () => {
 
-    test('[F1-API-1] Stripe Webhook: checkout.session.completed', { tag: ['@billing', '@flow-1'] }, async ({ request, cleanup }) => {
+    test('[API - 2.1] Stripe Webhook: checkout.session.completed', { tag: ['@billing', '@flow-1'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         const userId = `clerk_user_${Date.now()}`;
@@ -59,7 +59,7 @@ test.describe('Flow 1 | API: Event Discovery & Purchase', () => {
         });
     });
 
-    test('[F1-API-2] Sold Out Prevention', { tag: ['@queue', '@critical', '@flow-1'] }, async ({ request, cleanup }) => {
+    test('[API - 2.2] Sold Out Prevention', { tag: ['@queue', '@critical', '@flow-1'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
         let eventId: string;

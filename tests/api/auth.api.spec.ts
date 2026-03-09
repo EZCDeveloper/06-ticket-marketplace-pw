@@ -10,9 +10,9 @@ import { AuthClient } from '@/support/api/AuthClient';
  *
  * @see ABOUT_APPLICATION.md — Key User Flows (auth is a prerequisite for all)
  */
-test.describe('Auth | API: Authentication', () => {
+test.describe('API - 1: Authentication', () => {
 
-    test('[API-AUTH.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
+    test('[API - 1.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
         let user: any;
@@ -29,7 +29,7 @@ test.describe('Auth | API: Authentication', () => {
         });
     });
 
-    test('[API-AUTH.2] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API - 1.2] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
 

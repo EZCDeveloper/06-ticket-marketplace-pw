@@ -5,18 +5,18 @@ import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * Flow 3 | E2E Tests — Queue Management
+ * FLOW 4 | E2E - 4: Queue Management
  *
  * Validates edge cases and non-happy-path scenarios of the queue system:
  * User → Join Queue → Wait for Position → Receive Timed Offer →
  * Complete Purchase (within 10 minutes) OR Release Offer →
  * Next Person in Queue Gets Offer
  *
- * @see ABOUT_APPLICATION.md — Flow 3: Queue Management Flow
+ * @see ABOUT_APPLICATION.md — E2E - 4: Queue Management
  */
-test.describe('Flow 3 | E2E: Queue Management', () => {
+test.describe('E2E - 4: Queue Management', () => {
 
-    test('[F3-E2E-1] Sold Out View', { tag: ['@queue', '@flow-3'] }, async ({ buyer, request, cleanup }) => {
+    test('[E2E - 4.1] Sold Out View', { tag: ['@queue', '@flow-3'] }, async ({ buyer, request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(0).build();
         let eventId: string;
@@ -35,7 +35,7 @@ test.describe('Flow 3 | E2E: Queue Management', () => {
         });
     });
 
-    test('[F3-E2E-2] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative', '@flow-3'] }, async ({ buyer, convex, cleanup }) => {
+    test('[E2E - 4.2] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative', '@flow-3'] }, async ({ buyer, convex, cleanup }) => {
         let rateLimitSeen = false;
 
         await test.step('Step 1: Attempt joins across events until rate limit appears', async () => {
@@ -63,7 +63,7 @@ test.describe('Flow 3 | E2E: Queue Management', () => {
         });
     });
 
-    test.skip('[F3-E2E-3] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow', '@flow-3'] }, async () => {
+    test.skip('[E2E - 4.3] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow', '@flow-3'] }, async () => {
         /**
          * PENDING: Multi-user visual concurrency scenario.
          *

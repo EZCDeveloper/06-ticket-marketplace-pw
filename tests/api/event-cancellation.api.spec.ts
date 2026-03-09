@@ -4,17 +4,17 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * Flow 4 | API Tests — Event Cancellation
+ * FLOW 5 | API - 5: Event Cancellation
  *
  * Covers the business logic for the cancellation flow:
  * Event Owner → View My Events → Select Event → Cancel Event →
  * System Processes Refunds → Notify All Ticket Holders → Update Event Status
  *
- * @see ABOUT_APPLICATION.md — Flow 4: Event Cancellation Flow
+ * @see ABOUT_APPLICATION.md — API - 5: Event Cancellation
  */
-test.describe('Flow 4 | API: Event Cancellation', () => {
+test.describe('API - 5: Event Cancellation', () => {
 
-    test('[F4-API-1] Cancel Event', { tag: ['@events', '@flow-4'] }, async ({ request, cleanup }) => {
+    test('[API - 5.1] Cancel Event', { tag: ['@events', '@flow-4'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;

@@ -9,11 +9,11 @@ import { ClerkLoginForm } from '@/support/components/ClerkLoginForm';
  *
  * @see ABOUT_APPLICATION.md — Key User Flows (auth is a prerequisite for all)
  */
-test.describe('Auth | E2E: Authentication', () => {
+test.describe('E2E - 1: Authentication', () => {
 
     test.use({ storageState: { cookies: [], origins: [] } });
 
-    test('[E2E-AUTH.1] Complete Login Journey', { tag: ['@auth', '@critical'] }, async ({ page }) => {
+    test('[E2E - 1.1] Complete Login Journey', { tag: ['@auth', '@critical'] }, async ({ page }) => {
         const email = process.env.TEST_USER_EMAIL!;
         const password = process.env.TEST_USER_PASSWORD!;
 
@@ -34,7 +34,7 @@ test.describe('Auth | E2E: Authentication', () => {
         });
     });
 
-    test.skip('[E2E-AUTH.2] Login with Invalid Credentials', { tag: ['@auth', '@negative'] }, async ({ page }) => {
+    test.skip('[E2E - 1.2] Login with Invalid Credentials', { tag: ['@auth', '@negative'] }, async ({ page }) => {
         /**
          * PENDING: Implement once the negative credential path is confirmed.
          * Use ClerkLoginForm.fillAndSubmit() + expectEmailFieldVisible() / error assertion.

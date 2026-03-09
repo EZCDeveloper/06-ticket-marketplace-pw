@@ -6,15 +6,15 @@ import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * Flow 5 | E2E Tests — Ticket Management
+ * FLOW 6 | E2E - 6: Ticket Management
  *
  * Validates the ticket management journey through the UI:
  * User → My Tickets → View Ticket Details → Access QR Code →
  * Check Event Status → View Purchase History
  *
- * @see ABOUT_APPLICATION.md — Flow 5: Ticket Management Flow
+ * @see ABOUT_APPLICATION.md — E2E - 6: Ticket Management
  */
-test.describe('Flow 5 | E2E: Ticket Management', () => {
+test.describe('E2E - 6: Ticket Management', () => {
 
     /**
      * Purchases a ticket for a given user via the Convex API (no Stripe flow).
@@ -42,7 +42,7 @@ test.describe('Flow 5 | E2E: Ticket Management', () => {
         });
     }
 
-    test('[F5-E2E-1] View Purchased Ticket and QR Code', { tag: ['@users', '@flow-5'] }, async ({ buyer, cleanup, request }) => {
+    test('[E2E - 6.1] View Purchased Ticket and QR Code', { tag: ['@users', '@flow-5'] }, async ({ buyer, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const clerkAdmin = new ClerkAdminClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
@@ -92,7 +92,7 @@ test.describe('Flow 5 | E2E: Ticket Management', () => {
         }
     });
 
-    test('[F5-E2E-2] View Purchase History', { tag: ['@users', '@flow-5'] }, async ({ buyer, cleanup, request }) => {
+    test('[E2E - 6.2] View Purchase History', { tag: ['@users', '@flow-5'] }, async ({ buyer, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const clerkAdmin = new ClerkAdminClient(request);
         const eventA = new EventBuilder().withTickets(1).build();

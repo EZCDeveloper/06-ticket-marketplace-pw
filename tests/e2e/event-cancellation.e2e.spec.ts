@@ -2,17 +2,17 @@ import { test } from '@/fixtures/base.fixtures';
 import { EventBuilder } from '@/support/builders/EventBuilder';
 
 /**
- * Flow 4 | E2E Tests — Event Cancellation
+ * FLOW 5 | E2E - 5: Event Cancellation
  *
  * Validates the cancellation journey through the UI:
  * Event Owner → View My Events → Select Event → Cancel Event →
  * System Processes Refunds → Notify All Ticket Holders → Update Event Status
  *
- * @see ABOUT_APPLICATION.md — Flow 4: Event Cancellation Flow
+ * @see ABOUT_APPLICATION.md — E2E - 5: Event Cancellation
  */
-test.describe('Flow 4 | E2E: Event Cancellation', () => {
+test.describe('E2E - 5: Event Cancellation', () => {
 
-    test('[F4-E2E-1] Cancel Event from Seller Dashboard', { tag: ['@events', '@flow-4'] }, async ({ seller, cleanup }) => {
+    test('[E2E - 5.1] Cancel Event from Seller Dashboard', { tag: ['@events', '@flow-4'] }, async ({ seller, cleanup }) => {
         const eventData = new EventBuilder().build();
         let eventId: string;
 
@@ -32,7 +32,7 @@ test.describe('Flow 4 | E2E: Event Cancellation', () => {
         });
     });
 
-    test.skip('[F4-E2E-2] Ticket Holder Sees Refund Notice After Cancellation', { tag: ['@events', '@flow-4'] }, async () => {
+    test.skip('[E2E - 5.2] Ticket Holder Sees Refund Notice After Cancellation', { tag: ['@events', '@flow-4'] }, async () => {
         /**
          * BLOCKED — requires Stripe test mode integration.
          *
