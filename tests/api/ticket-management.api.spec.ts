@@ -14,7 +14,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('API - 6: Ticket Management', () => {
 
-    test('[API - 6.1] Create/Update User Profile', { tag: ['@users', '@flow-5'] }, async ({ request, cleanup }) => {
+    test('[API - 6.1] Create/Update User Profile', { tag: ['@tickets', '@flow-6'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const userData = new UserBuilder().build();
         const userId = `clerk_${userData.email.split('@')[0]}`;

@@ -12,7 +12,7 @@ import { EventBuilder } from '@/support/builders/EventBuilder';
  */
 test.describe('E2E - 5: Event Cancellation', () => {
 
-    test('[E2E - 5.1] Cancel Event from Seller Dashboard', { tag: ['@events', '@flow-4'] }, async ({ seller, cleanup }) => {
+    test('[E2E - 5.1] Cancel Event from Seller Dashboard', { tag: ['@events', '@flow-5'] }, async ({ seller, cleanup }) => {
         const eventData = new EventBuilder().build();
         let eventId: string;
 
@@ -32,7 +32,7 @@ test.describe('E2E - 5: Event Cancellation', () => {
         });
     });
 
-    test.skip('[E2E - 5.2] Ticket Holder Sees Refund Notice After Cancellation', { tag: ['@events', '@flow-4'] }, async () => {
+    test.skip('[E2E - 5.2] Ticket Holder Sees Refund Notice After Cancellation', { tag: ['@events', '@flow-5'] }, async () => {
         /**
          * BLOCKED — requires Stripe test mode integration.
          *

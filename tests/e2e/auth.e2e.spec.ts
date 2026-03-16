@@ -13,7 +13,7 @@ test.describe('E2E - 1: Authentication', () => {
 
     test.use({ storageState: { cookies: [], origins: [] } });
 
-    test('[E2E - 1.1] Complete Login Journey', { tag: ['@auth', '@critical'] }, async ({ page }) => {
+    test('[E2E - 1.1] Complete Login Journey', { tag: ['@auth', '@critical', '@flow-1'] }, async ({ page }) => {
         const email = process.env.TEST_USER_EMAIL!;
         const password = process.env.TEST_USER_PASSWORD!;
 
@@ -34,7 +34,7 @@ test.describe('E2E - 1: Authentication', () => {
         });
     });
 
-    test.skip('[E2E - 1.2] Login with Invalid Credentials', { tag: ['@auth', '@negative'] }, async ({ page }) => {
+    test.skip('[E2E - 1.2] Login with Invalid Credentials', { tag: ['@auth', '@negative', '@flow-1'] }, async ({ page }) => {
         /**
          * PENDING: Implement once the negative credential path is confirmed.
          * Use ClerkLoginForm.fillAndSubmit() + expectEmailFieldVisible() / error assertion.

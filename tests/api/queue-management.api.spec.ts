@@ -15,7 +15,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('API - 4: Queue Management', () => {
 
-    test('[API - 4.1] Join Queue - FIFO Validation', { tag: ['@queue', '@critical', '@flow-3'] }, async ({ request, cleanup }) => {
+    test('[API - 4.1] Join Queue - FIFO Validation', { tag: ['@queue', '@critical', '@flow-4'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
         let eventId: string;

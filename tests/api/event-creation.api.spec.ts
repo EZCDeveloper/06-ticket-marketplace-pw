@@ -14,7 +14,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('API - 3: Event Creation', () => {
 
-    test('[API - 3.1] Create New Event (Happy Path)', { tag: ['@events', '@critical', '@flow-2'] }, async ({ request, cleanup }) => {
+    test('[API - 3.1] Create New Event (Happy Path)', { tag: ['@events', '@critical', '@flow-3'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;
@@ -32,7 +32,7 @@ test.describe('API - 3: Event Creation', () => {
         });
     });
 
-    test('[API - 3.2] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative', '@flow-2'] }, async ({ request, cleanup }) => {
+    test('[API - 3.2] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative', '@flow-3'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         let eventId: string;

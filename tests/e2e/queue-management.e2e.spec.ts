@@ -16,7 +16,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('E2E - 4: Queue Management', () => {
 
-    test('[E2E - 4.1] Sold Out View', { tag: ['@queue', '@flow-3'] }, async ({ buyer, request, cleanup }) => {
+    test('[E2E - 4.1] Sold Out View', { tag: ['@queue', '@flow-4'] }, async ({ buyer, request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(0).build();
         let eventId: string;
@@ -35,7 +35,7 @@ test.describe('E2E - 4: Queue Management', () => {
         });
     });
 
-    test('[E2E - 4.2] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative', '@flow-3'] }, async ({ buyer, convex, cleanup }) => {
+    test('[E2E - 4.2] Rate Limit Warning on Excessive Queue Attempts', { tag: ['@queue', '@negative', '@flow-4'] }, async ({ buyer, convex, cleanup }) => {
         let rateLimitSeen = false;
 
         await test.step('Step 1: Attempt joins across events until rate limit appears', async () => {
@@ -63,7 +63,7 @@ test.describe('E2E - 4: Queue Management', () => {
         });
     });
 
-    test.skip('[E2E - 4.3] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow', '@flow-3'] }, async () => {
+    test.skip('[E2E - 4.3] Two Buyers Compete for Last Ticket (PENDING)', { tag: ['@queue', '@slow', '@flow-4'] }, async () => {
         /**
          * PENDING: Multi-user visual concurrency scenario.
          *

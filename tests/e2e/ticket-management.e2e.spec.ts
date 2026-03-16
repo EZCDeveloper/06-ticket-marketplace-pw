@@ -42,7 +42,7 @@ test.describe('E2E - 6: Ticket Management', () => {
         });
     }
 
-    test('[E2E - 6.1] View Purchased Ticket and QR Code', { tag: ['@users', '@flow-5'] }, async ({ buyer, cleanup, request }) => {
+    test('[E2E - 6.1] View Purchased Ticket and QR Code', { tag: ['@tickets', '@flow-6'] }, async ({ buyer, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const clerkAdmin = new ClerkAdminClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
@@ -92,7 +92,7 @@ test.describe('E2E - 6: Ticket Management', () => {
         }
     });
 
-    test('[E2E - 6.2] View Purchase History', { tag: ['@users', '@flow-5'] }, async ({ buyer, cleanup, request }) => {
+    test('[E2E - 6.2] View Purchase History', { tag: ['@tickets', '@flow-6'] }, async ({ buyer, cleanup, request }) => {
         const convex = new ConvexClient(request);
         const clerkAdmin = new ClerkAdminClient(request);
         const eventA = new EventBuilder().withTickets(1).build();

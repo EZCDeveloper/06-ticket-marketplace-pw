@@ -14,7 +14,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('API - 2: Event Discovery & Purchase', () => {
 
-    test('[API - 2.1] Stripe Webhook: checkout.session.completed', { tag: ['@billing', '@flow-1'] }, async ({ request, cleanup }) => {
+    test('[API - 2.1] Stripe Webhook: checkout.session.completed', { tag: ['@billing', '@flow-2'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         const userId = `clerk_user_${Date.now()}`;
@@ -59,7 +59,7 @@ test.describe('API - 2: Event Discovery & Purchase', () => {
         });
     });
 
-    test('[API - 2.2] Sold Out Prevention', { tag: ['@queue', '@critical', '@flow-1'] }, async ({ request, cleanup }) => {
+    test('[API - 2.2] Sold Out Prevention', { tag: ['@queue', '@critical', '@flow-2'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(1).build();
         let eventId: string;

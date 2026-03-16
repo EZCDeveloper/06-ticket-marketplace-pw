@@ -17,7 +17,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('E2E - 2: Event Discovery & Purchase', () => {
 
-    test('[E2E - 2.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical', '@flow-1'] }, async ({ buyer, convex, cleanup, request }) => {
+    test('[E2E - 2.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical', '@flow-2'] }, async ({ buyer, convex, cleanup, request }) => {
         const eventData = new EventBuilder().build();
         const clerkAdmin = new ClerkAdminClient(request);
         let tempClerkUserId: string | undefined;
