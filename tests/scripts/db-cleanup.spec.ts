@@ -24,9 +24,9 @@ test.describe('Utility: Database Cleanup', () => {
         return parts[parts.length - 1];
     };
 
-    test.skip('Remove event and all related data by Event ID', async ({ baseURL }) => {
+    test('Remove event and all related data by Event ID', async ({ baseURL }) => {
         // 🛠️ CONFIGURATION: Set the event URL here
-        const event = 'jh77j5q9r5qzk98zxrfw4a3xzh812651';
+        const event = 'jh7bpvxyh6sa838vwapqvw1q91827fys';
         const eventUrl = `${baseURL}/event/${event}`;
         const eventId = extractEventId(eventUrl);
 
@@ -62,8 +62,8 @@ test.describe('Utility: Database Cleanup', () => {
 
     test.skip('Remove tickets by creation date range', async () => {
         // 🛠️ CONFIGURATION: Set the dates here (YYYY-MM-DD)
-        const startDateStr = '2023-01-01';
-        const endDateStr = '2023-12-31';
+        const startDateStr = '2026-03-16';
+        const endDateStr = '2026-03-16';
 
         const startDate = new Date(startDateStr).getTime();
         const endDate = new Date(endDateStr).getTime();
