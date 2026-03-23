@@ -15,47 +15,42 @@ test.describe('Utility: Database Cleanup', () => {
         convex = new ConvexClient(request);
     });
 
-    /**
-     * Helper to extract Event ID from a URL
-     * Example: http://localhost:3000/event/jh7292enhwy0f43dkp7r24qw3980eqve
-     */
-    const extractEventId = (url: string): string => {
-        const parts = url.split('/');
-        return parts[parts.length - 1];
-    };
+    test.skip('Remove event and all related data by Event ID', async () => {
+        // 🛠️ CONFIGURATION: activate ONE option, comment out the others
+        // const input: string | string[] = ['id_one', 'id_two', 'id_three'];
+        // const input: string | string[] = 'http://localhost:3000/event/PASTE_ID_HERE';
+        const input: string | string[] = ['http://localhost:3000/event/jh7dceennrhd60vfew67watwtx82bbr8'];
 
-    test('Remove event and all related data by Event ID', async ({ baseURL }) => {
-        // 🛠️ CONFIGURATION: Set the event URL here
-        const event = 'jh7bpvxyh6sa838vwapqvw1q91827fys';
-        const eventUrl = `${baseURL}/event/${event}`;
-        const eventId = extractEventId(eventUrl);
+        // Accepts a raw ID or a full URL — strips the path if needed
+        const normalize = (entry: string): string =>
+            entry.startsWith('http') ? entry.split('/').at(-1)! : entry;
 
-        process.stdout.write(`\n🧹 Cleaning up event: ${eventId}...\n`);
+        const eventIds = (Array.isArray(input) ? input : [input]).map(normalize);
 
-        try {
-            // ✅ ACT: Call the cleanup mutation
-            const result = await convex.mutation(CONVEX_FN.dbCleanup.removeEventAndTickets, { eventId });
+        process.stdout.write(`\n🧹 Starting cleanup for ${eventIds.length} event(s)...\n`);
 
-            // Check if result is valid
-            if (!result) {
-                process.stdout.write(`⚠️  Event not found: ${eventId}\n`);
-                process.stdout.write(`   The event may have already been deleted.\n`);
-                return;
-            }
+        for (const eventId of eventIds) {
+            process.stdout.write(`\n🔹 Processing: ${eventId}\n`);
+            try {
+                const result = await convex.mutation(CONVEX_FN.dbCleanup.removeEventAndTickets, { eventId });
 
-            // ✅ ASSERT: Success and log result
-            expect(result.success).toBe(true);
-            process.stdout.write(`✅ Successfully removed:\n`);
-            process.stdout.write(`   - Event: ${result.deletedEvent ? '1' : '0'}\n`);
-            process.stdout.write(`   - Tickets: ${result.deletedTickets}\n`);
-            process.stdout.write(`   - Waiting list entries: ${result.deletedWaitingListEntries}\n`);
-        } catch (error: any) {
-            // Handle case where event doesn't exist
-            if (error.message?.includes('not found') || error.message?.includes('Document not found') || error.message?.includes('Event not found')) {
-                process.stdout.write(`⚠️  Event not found: ${eventId}\n`);
-                process.stdout.write(`   The event may have already been deleted.\n`);
-            } else {
-                throw error; // Re-throw unexpected errors
+                if (!result) {
+                    process.stdout.write(`⚠️  Not found: ${eventId} (may already be deleted)\n`);
+                    continue;
+                }
+
+                expect(result.success).toBe(true);
+                process.stdout.write(`✅ Removed — Event: ${result.deletedEvent ? 1 : 0} | Tickets: ${result.deletedTickets} | Waiting list: ${result.deletedWaitingListEntries}\n`);
+
+            } catch (error: any) {
+                const isNotFound = ['not found', 'Document not found', 'Event not found']
+                    .some(msg => error.message?.includes(msg));
+
+                if (isNotFound) {
+                    process.stdout.write(`⚠️  Not found: ${eventId} (may already be deleted)\n`);
+                } else {
+                    throw error;
+                }
             }
         }
     });
