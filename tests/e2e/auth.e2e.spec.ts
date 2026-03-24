@@ -5,7 +5,7 @@ import { ClerkLoginForm } from '@/support/components/ClerkLoginForm';
  * Auth | E2E Tests — Authentication
  *
  * Authentication is the foundational flow — it gates all other user flows.
- * A failure here means flows 1-5 cannot execute.
+ * A failure here means flows 2-6 cannot execute.
  *
  * @see ABOUT_APPLICATION.md — Key User Flows (auth is a prerequisite for all)
  */

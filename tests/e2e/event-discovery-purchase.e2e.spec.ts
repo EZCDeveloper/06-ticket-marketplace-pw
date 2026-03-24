@@ -5,7 +5,7 @@ import { TEST_EVENT_OWNER_USER_ID } from '@/support/config/testUsers';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * FLOW 2 | E2E - 2: Event Discovery & Purchase
+ * FLOW 3 | E2E - 3: Event Discovery & Purchase
  *
  * Validates the complete buyer journey through the UI:
  * Guest/User → Browse Events → View Event Details → Sign In →
@@ -13,11 +13,11 @@ import { CONVEX_FN } from '@config/convex-functions';
  *
  * Event is created via API to isolate this flow from Seller UI flakiness.
  *
- * @see ABOUT_APPLICATION.md — E2E - 2: Event Discovery & Purchase
+ * @see ABOUT_APPLICATION.md — E2E - 3: Event Discovery & Purchase
  */
-test.describe('E2E - 2: Event Discovery & Purchase', () => {
+test.describe('E2E - 3: Event Discovery & Purchase', () => {
 
-    test('[E2E - 2.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical', '@flow-2'] }, async ({ buyer, convex, cleanup, request }) => {
+    test('[E2E - 3.1] Join Queue and Receive Offer', { tag: ['@queue', '@critical', '@flow-3'] }, async ({ buyer, convex, cleanup, request }) => {
         const eventData = new EventBuilder().build();
         const clerkAdmin = new ClerkAdminClient(request);
         let tempClerkUserId: string | undefined;

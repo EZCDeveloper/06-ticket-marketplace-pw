@@ -4,17 +4,17 @@ import { ConvexClient } from '@/support/api/ConvexClient';
 import { CONVEX_FN } from '@config/convex-functions';
 
 /**
- * FLOW 3 | API - 3: Event Creation (Seller)
+ * FLOW 2 | API - 2: Event Creation (Seller)
  *
  * Covers the business logic for the seller creation flow:
  * User → Sign In → Seller Dashboard → Create New Event →
  * Fill Event Details → Upload Image → Set Pricing & Capacity → Publish Event
  *
- * @see ABOUT_APPLICATION.md — API - 3: Event Creation (Seller)
+ * @see ABOUT_APPLICATION.md — API - 2: Event Creation (Seller)
  */
-test.describe('API - 3: Event Creation', () => {
+test.describe('API - 2: Event Creation', () => {
 
-    test('[API - 3.1] Create New Event (Happy Path)', { tag: ['@events', '@critical', '@flow-3'] }, async ({ request, cleanup }) => {
+    test('[API - 2.1] Create New Event (Happy Path)', { tag: ['@events', '@critical', '@flow-2'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;
@@ -32,7 +32,7 @@ test.describe('API - 3: Event Creation', () => {
         });
     });
 
-    test('[API - 3.2] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative', '@flow-3'] }, async ({ request, cleanup }) => {
+    test('[API - 2.2] Prevent Reducing Tickets Below Sold Count', { tag: ['@events', '@negative', '@flow-2'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().withTickets(10).build();
         let eventId: string;
