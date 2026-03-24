@@ -1,5 +1,5 @@
 {
-    "name": "ticket-marketplace-playwright",
+    "name": "mytickets-marketplace-playwright",
     "version": "1.0.0",
     "description": "Ticket Marketplace - Playwright testing suite",
     "author": "Emanuel Zini Casaro",
