@@ -14,7 +14,7 @@ import { CONVEX_FN } from '@config/convex-functions';
  */
 test.describe('API - 5: Event Cancellation', () => {
 
-    test('[API - 5.1] Cancel Event', { tag: ['@events', '@flow-4'] }, async ({ request, cleanup }) => {
+    test('[API - 5.1] Cancel Event', { tag: ['@events', '@flow-5'] }, async ({ request, cleanup }) => {
         const convex = new ConvexClient(request);
         const eventData = new EventBuilder().build();
         let eventId: string;
