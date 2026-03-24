@@ -32,9 +32,13 @@ npx playwright install --with-deps
 cp .env.example .env.local
 ```
 
-Edit **`.env.local`** with your real values (never commit secrets). **`.env.example`** documents every variable—at minimum set **`BASE_URL`**, **`TEST_USER_EMAIL`**, and **`TEST_USER_PASSWORD`** so `tests/auth.setup.ts` can sign in with Clerk. Add Convex / Clerk keys there if your API or tooling needs them.
+Edit **`.env.local`** with your real values (never commit secrets). **`.env.example`** documents every variable—at minimum set **`BASE_URL`**, **`TEST_USER_EMAIL`**, and **`TEST_USER_PASSWORD`** so `tests/auth.setup.ts` can sign in with Clerk. Set **`NEXT_PUBLIC_CONVEX_URL`** for API specs that use `ConvexClient` (no default URL is shipped). Use **`CLERK_SECRET_KEY`** only if tests create temporary users via the Clerk Backend API.
 
-After a successful first login, the **setup** project saves the session to `playwright/.auth/user.json` for smoke, API, and E2E.
+After a successful first login, the **setup** project saves the session to `playwright/.auth/user.json` for smoke, API, and E2E. That file is **gitignored** (it contains session cookies).
+
+### GitHub Actions
+
+Configure these **repository secrets** so CI can run: `BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`, `NEXT_PUBLIC_CONVEX_URL`. Add `CLERK_SECRET_KEY` if your pipeline runs specs that need the Clerk Admin API.
 
 ### 4. Run tests
 

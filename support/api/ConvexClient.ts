@@ -1,14 +1,24 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext } from '@playwright/test';
 
 /**
  * ConvexClient - Abstraction for calling Convex functions via HTTP API.
  * Uses the Convex POST /api/mutation and /api/query endpoints.
  */
+function requireConvexUrl(): string {
+    const url = process.env.NEXT_PUBLIC_CONVEX_URL?.trim();
+    if (!url) {
+        throw new Error(
+            'NEXT_PUBLIC_CONVEX_URL must be set in .env.local (your Convex deployment URL, no trailing slash).',
+        );
+    }
+    return url.replace(/\/$/, '');
+}
+
 export class ConvexClient {
     private convexUrl: string;
 
     constructor(private request: APIRequestContext) {
-        this.convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || 'https://majestic-sparrow-23.convex.cloud';
+        this.convexUrl = requireConvexUrl();
     }
 
     /**

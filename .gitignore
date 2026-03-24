@@ -2,6 +2,11 @@ node_modules/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+# Session cookies / Clerk tokens — never commit
+playwright/.auth/
+# Large local recordings (regenerate with npm run record:*)
+playwright/video/
+playwright/screenshots/*.png
 /.auth/
 .env
 .env.local
