@@ -38,7 +38,7 @@ After a successful first login, the **setup** project saves the session to `play
 
 ### GitHub Actions
 
-Configure these **repository secrets** so CI can run: `BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`, `NEXT_PUBLIC_CONVEX_URL`. Add `CLERK_SECRET_KEY` if your pipeline runs specs that need the Clerk Admin API.
+Configure these **repository secrets** so CI can run: `BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`, `NEXT_PUBLIC_CONVEX_URL`. Add `CLERK_SECRET_KEY` if your pipeline runs specs that need the Clerk Admin API. The workflow runs **`npm run test:ci`** (one Playwright process: smoke, api, e2e — setup and smoke are not repeated between steps).
 
 ### 4. Run tests
 
@@ -49,15 +49,21 @@ npm test
 # UI mode (interactive)
 npm run ui
 
-# By project
+# By project (good for local iteration)
 npm run test:smoke   # health — depends on setup
 npm run test:api     # specs under tests/api/
 npm run test:e2e     # specs under tests/e2e/
+
+# Same suite as CI in one process (setup + smoke once, then api + e2e)
+npm run test:ci
 
 # Utilities
 npm run test:headed
 npm run test:debug
 npm run report       # open HTML report
+
+# Destructive Convex cleanup (edit tests/scripts/db-cleanup.spec.ts, then):
+# ALLOW_DESTRUCTIVE_CLEANUP=true npm run cleanup
 ```
 ---
 

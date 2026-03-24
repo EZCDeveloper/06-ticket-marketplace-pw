@@ -10,6 +10,7 @@
         "test:api": "env -u NO_COLOR playwright test --project=api",
         "test:e2e": "env -u NO_COLOR playwright test --project=e2e",
         "test:smoke": "env -u NO_COLOR playwright test --project=smoke",
+        "test:ci": "env -u NO_COLOR playwright test --project=smoke --project=api --project=e2e",
         "test:critical": "env -u NO_COLOR playwright test --grep @critical",
         "test:events": "env -u NO_COLOR playwright test --grep @events",
         "test:queues": "env -u NO_COLOR playwright test --grep @queues",
