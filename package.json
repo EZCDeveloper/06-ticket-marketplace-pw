@@ -1,7 +1,8 @@
 {
-    "name": "playwright-saas-turbo",
+    "name": "ticket-marketplace-playwright",
     "version": "1.0.0",
-    "description": "SaaS Turbo - Ready-to-use Playwright testing template with Quality Speed philosophy",
+    "description": "Ticket Marketplace - Playwright testing suite",
+    "author": "Emanuel Zini Casaro",
     "main": "index.js",
     "scripts": {
         "test": "env -u NO_COLOR playwright test",
@@ -27,11 +28,11 @@
         "playwright",
         "testing",
         "saas",
-        "template",
-        "boilerplate",
-        "api-first"
+        "automation",
+        "e2e",
+        "api-first",
+        "quality-speed"
     ],
-    "author": "",
     "license": "MIT",
     "devDependencies": {
         "@faker-js/faker": "^8.3.1",
