@@ -16,14 +16,16 @@
 #     STRIPE_SECRET_KEY         — only if specs hit Stripe test mode (see event-cancellation)
 #
 # Fork PRs: secrets are not available to workflows from forks (GitHub default).
+#
+# Automatic runs (push / pull_request) are disabled until a public BASE_URL exists.
+# Re-enable by adding under `on:`:
+#   push: { branches: [main] }
+#   pull_request: { branches: [main] }
+# To disable Actions entirely: GitHub → Settings → Actions → General.
 
 name: E2E Tests
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 concurrency:

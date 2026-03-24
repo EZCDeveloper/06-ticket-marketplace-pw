@@ -38,7 +38,7 @@ After a successful first login, the **setup** project saves the session to `play
 
 ### GitHub Actions
 
-Configure these **repository secrets** so CI can run: `BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`, `NEXT_PUBLIC_CONVEX_URL`. Add `CLERK_SECRET_KEY` if your pipeline runs specs that need the Clerk Admin API. The workflow runs **`npm run test:ci`** (one Playwright process: smoke, api, e2e — setup and smoke are not repeated between steps).
+Configure these **repository secrets** when you run CI: `BASE_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`, `NEXT_PUBLIC_CONVEX_URL`. Add `CLERK_SECRET_KEY` if specs need the Clerk Admin API. The workflow is **manual-only** (`workflow_dispatch`): open **Actions → E2E Tests → Run workflow**; it runs **`npm run test:ci`**. To run on every push/PR again, restore `push` / `pull_request` in `.github/workflows/e2e.yml`. You can also turn off Actions under repo **Settings → Actions**.
 
 ### 4. Run tests
 
