@@ -10,10 +10,10 @@
 #     TEST_USER_PASSWORD
 #     NEXT_PUBLIC_CONVEX_URL    — Convex deployment URL (ConvexClient)
 #   Optional:
-#     CLERK_SECRET_KEY          — Backend API (temporary users in some E2E specs)
+#     CLERK_SECRET_KEY          — Backend API (temporary users in some E2E specs).
 #     API_URL                   — defaults to BASE_URL in config/endpoints.ts
 #     CLERK_API_URL             — defaults to https://api.clerk.com/v1
-#     STRIPE_SECRET_KEY         — only if specs hit Stripe test mode (see event-cancellation)
+#     STRIPE_SECRET_KEY         — only if specs hit Stripe test mode (see event-cancellation).
 #
 # Fork PRs: secrets are not available to workflows from forks (GitHub default).
 #
