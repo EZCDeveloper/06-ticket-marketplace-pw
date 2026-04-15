@@ -12,7 +12,7 @@ import { AuthClient } from '@/support/api/AuthClient';
  */
 test.describe('API - 1: Authentication', () => {
 
-    test('[API - 1.1] User Registration - Success', { tag: ['@auth'] }, async ({ request, cleanup }) => {
+    test('[API - 1.1] User Registration - Success', { tag: ['@auth', '@critical', '@flow-1'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
         let user: any;
@@ -29,7 +29,7 @@ test.describe('API - 1: Authentication', () => {
         });
     });
 
-    test('[API - 1.2] User Login - Success', { tag: ['@auth', '@critical'] }, async ({ request, cleanup }) => {
+    test('[API - 1.2] User Login - Success', { tag: ['@auth', '@critical', '@flow-1'] }, async ({ request, cleanup }) => {
         const userData = new UserBuilder().build();
         const authClient = new AuthClient(request);
 
