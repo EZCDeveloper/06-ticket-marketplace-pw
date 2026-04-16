@@ -17,7 +17,7 @@ import { EventForm } from '@/support/components/EventForm';
  */
 test.describe('E2E: Seller Flow (Sample)', () => {
 
-    test('[SAMPLE] Create New Event via Dashboard', async ({ page }) => {
+    test('[SAMPLE 1] Create New Event via Dashboard', async ({ page }) => {
 
         // ARRANGE: Log in using the ClerkLoginForm component.
         // In production tests, use pre-authenticated storageState instead.
